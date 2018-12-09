@@ -13,7 +13,7 @@ namespace Klserjht
         private TwitchClient _client;
         private Configuration _configuration;
 
-        private bool _isLoaded = false;
+        private bool _isLoaded;
 
         private const string ConfigurationPath = "Klserjht.json";
 
@@ -96,7 +96,14 @@ namespace Klserjht
 
         private void updateLinkLabel_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
         {
-            Process.Start(e.Link.LinkData as string);
+            const string updaterPath = "Klserjht.Updater.exe";
+
+            if (File.Exists(updaterPath))
+            {
+                Process.Start(updaterPath);
+                Close();
+            }
+            else Process.Start(e.Link.LinkData as string);
         }
 
         private void loginButton_Click(object sender, EventArgs e)
@@ -111,6 +118,18 @@ namespace Klserjht
 
         private void updateWorker_DoWork(object sender, DoWorkEventArgs e)
         {
+            var currentFolder = System.Reflection.Assembly.GetExecutingAssembly().Location;
+            currentFolder = currentFolder.Remove(currentFolder.LastIndexOf('\\') + 1);
+
+            var currentUpdaterPath = $"{currentFolder}Klserjht.Updater.exe";
+            var latestUpdaterPath = $"{currentFolder}_update\\Klserjht.Updater.exe";
+
+            if (File.Exists(latestUpdaterPath))
+            {
+                File.Delete(currentUpdaterPath);
+                File.Move(latestUpdaterPath, currentUpdaterPath);
+            }
+
             updateLinkLabel.BeginInvoke((Action)(() => updateLinkLabel.Links[0].Enabled = false));
 
             using (var client = new WebClient())
@@ -138,10 +157,13 @@ namespace Klserjht
             Beatmap.Initialise();
             _isLoaded = true;
 
-            loginButton.Enabled = _isLoaded && usernameTextBox.Text.Length >= 4 && usernameTextBox.Text.Length <= 25 &&
-                                  tokenTextBox.Text.Length == 36 && channelTextBox.Text.Length >= 4 &&
-                                  channelTextBox.Text.Length <= 25 && formatTextBox.Text.Length > 0 &&
-                                  commandTextBox.Text.Length > 0;
+            loginButton.BeginInvoke((Action)(() =>
+            {
+                loginButton.Enabled = _isLoaded && usernameTextBox.Text.Length >= 4 && usernameTextBox.Text.Length <= 25 &&
+                                      tokenTextBox.Text.Length == 36 && channelTextBox.Text.Length >= 4 &&
+                                      channelTextBox.Text.Length <= 25 && formatTextBox.Text.Length > 0 &&
+                                      commandTextBox.Text.Length > 0;
+            }));
         }
 
         private void _client_OnMessageReceived(object sender, TwitchClient.OnMessageReceivedArgs e)

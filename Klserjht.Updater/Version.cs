@@ -1,6 +1,6 @@
 ﻿using Newtonsoft.Json;
 
-namespace Klserjht
+namespace Klserjht.Updater
 {
     class Version
     {

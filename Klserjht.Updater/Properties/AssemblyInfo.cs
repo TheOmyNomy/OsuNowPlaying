@@ -4,11 +4,11 @@ using System.Runtime.InteropServices;
 // General Information about an assembly is controlled through the following
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("Klserjht")]
+[assembly: AssemblyTitle("Klserjht.Updater")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("")]
-[assembly: AssemblyProduct("Klserjht")]
+[assembly: AssemblyProduct("Klserjht.Updater")]
 [assembly: AssemblyCopyright("Copyright © TheOmyNomy 2018")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
@@ -19,7 +19,7 @@ using System.Runtime.InteropServices;
 [assembly: ComVisible(false)]
 
 // The following GUID is for the ID of the typelib if this project is exposed to COM
-[assembly: Guid("3c6c77f7-7f7b-482c-b189-1e0d26667399")]
+[assembly: Guid("af4c0528-eb5a-45de-b839-d06487cf729c")]
 
 // Version information for an assembly consists of the following four values:
 //
@@ -31,5 +31,5 @@ using System.Runtime.InteropServices;
 // You can specify all the values or you can default the Build and Revision Numbers
 // by using the '*' as shown below:
 // [assembly: AssemblyVersion("1.0.*")]
-[assembly: AssemblyVersion("2018.12.06.0")]
+[assembly: AssemblyVersion("2018.12.09.0")]
 [assembly: AssemblyFileVersion("2018.12.09.0")]
