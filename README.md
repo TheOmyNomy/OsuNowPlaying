@@ -33,7 +33,9 @@ Below is an example with all the text fields filled out.
 Once all the fields have been filled out, click the **Login** button to login and the application will begin to listen for the command specified and respond with the format specified.
 
 ## Updating
-Klsjerht checks for updates when the application is launched. If an update is available, the text **No updates available.** will change to **Update available! Click here!** and will become a clickable link. Once clicked, it'll open the download page for the latest version in your default browser. Download the latest version and replace all existing files (except the configuration file, **Klsjerht.json**) with the new files.
+Klsjerht checks for updates when the application is launched. If an update is available, the text **No updates available.** will change to **Update available! Click here!** and will become a clickable link. Once clicked, Klserjht will automatically close, update and relaunch itself.
+
+In the instance that the updater can not be found, Klserjht will instead open the download page for the latest version in your default browser. Download the latest version and replace all existing files (except the configuration file, **Klsjerht.json**) with the new files.
 
 Below is an example with an update available.
 
