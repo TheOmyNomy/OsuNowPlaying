@@ -7,7 +7,7 @@ There is no installation process as Klserjht is a portable application. Click [h
 ## Setup
 Below is an example of Klserjht on its first launch.
 
-![](https://puu.sh/Ca5o7/c38a55efb7.png "")
+![](https://puu.sh/DlqR4/c0b5be8795.png "")
 
 Below contains information regarding each text field and its use.
 
