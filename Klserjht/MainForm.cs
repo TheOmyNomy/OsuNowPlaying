@@ -5,6 +5,7 @@ using System.IO;
 using System.Net;
 using System.Windows.Forms;
 using Newtonsoft.Json;
+using OsuMemoryDataProvider;
 
 namespace Klserjht
 {
@@ -17,6 +18,8 @@ namespace Klserjht
 
         private const string ConfigurationPath = "Klserjht.json";
 
+        private OsuMemoryReader _osuMemoryReader;
+
         public MainForm()
         {
             InitializeComponent();
@@ -25,6 +28,8 @@ namespace Klserjht
         private void MainForm_Load(object sender, EventArgs e)
         {
             Text = $"Klserjht-{Program.Version}";
+            
+            _osuMemoryReader = new OsuMemoryReader();
 
             updateWorker.RunWorkerAsync();
             beatmapWorker.RunWorkerAsync();
@@ -171,37 +176,7 @@ namespace Klserjht
             var name = e.Message.Split()[0];
             if (!name.Equals(commandTextBox.Text, StringComparison.OrdinalIgnoreCase)) return;
 
-            var list = Process.GetProcessesByName("osu!");
-            if (list.Length == 0)
-            {
-                _client.SendMessage("The streamer is not playing osu! or does not have osu! open.");
-                return;
-            }
-
-            var split = list[0].MainWindowTitle.Split();
-
-            var title = string.Empty;
-            for (var i = 3; i < split.Length; i++) title += split[i] + ' ';
-            title = title.Trim();
-
-            if (split.Length <= 3)
-            {
-                _client.SendMessage("The streamer is not playing at the moment.");
-                return;
-            }
-
-            Beatmap beatmap = null;
-
-            foreach (var item in Beatmap.List)
-            {
-                var itemTitle = $"{item.Artist} - {item.Title} [{item.Version}]";
-
-                if (itemTitle == title)
-                {
-                    beatmap = item;
-                    break;
-                }
-            }
+            Beatmap beatmap = Beatmap.Dictionary[_osuMemoryReader.GetMapId()];
 
             if (beatmap == null)
             {
@@ -214,7 +189,7 @@ namespace Klserjht
             {
                 var response = formatTextBox.Text.Replace("!artist!", beatmap.Artist).Replace("!title", beatmap.Title)
                     .Replace("!creator!", beatmap.Creator).Replace("!version!", beatmap.Version)
-                    .Replace("!link!", "https://osu.ppy.sh/b/" + beatmap.BeatmapId).Replace("!sender!", e.Sender);
+                    .Replace("!link!", "https://osu.ppy.sh/b/" + beatmap.Id).Replace("!sender!", e.Sender);
 
                 _client.SendMessage(response);
             }

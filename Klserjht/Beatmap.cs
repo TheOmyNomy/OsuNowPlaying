@@ -9,16 +9,17 @@ namespace Klserjht
         public string Title { get; private set; }
         public string Creator { get; private set; }
         public string Version { get; private set; }
-        public int BeatmapId { get; private set; }
+        public int Id { get; private set; }
 
-        public static List<Beatmap> List { get; private set; }
+        public static Dictionary<int, Beatmap> Dictionary { get; private set; }
 
         private static string _installationPath;
 
         public static void Initialise()
         {
             _installationPath =
-                (string)Microsoft.Win32.Registry.GetValue("HKEY_CLASSES_ROOT\\osu\\DefaultIcon", string.Empty, string.Empty);
+                (string) Microsoft.Win32.Registry.GetValue("HKEY_CLASSES_ROOT\\osu\\DefaultIcon", string.Empty,
+                    string.Empty);
 
             if (string.IsNullOrWhiteSpace(_installationPath)) return;
             _installationPath = _installationPath.Substring(1).Remove(_installationPath.Length - 12);
@@ -56,22 +57,16 @@ namespace Klserjht
                     if (tokens[0] == "Title") beatmap.Title = value;
                     if (tokens[0] == "Creator") beatmap.Creator = value;
                     if (tokens[0] == "Version") beatmap.Version = value;
-                    if (tokens[0] == "BeatmapID") beatmap.BeatmapId = int.Parse(value);
+                    if (tokens[0] == "BeatmapID") beatmap.Id = int.Parse(value);
                 }
             }
 
-            foreach (var item in List)
-            {
-                if (beatmap.Artist == item.Artist && beatmap.Title == item.Title && beatmap.Creator == item.Creator &&
-                    beatmap.Version == item.Version && beatmap.BeatmapId == item.BeatmapId) return;
-            }
-
-            List.Add(beatmap);
+            if (!Dictionary.ContainsKey(beatmap.Id)) Dictionary.Add(beatmap.Id, beatmap);
         }
 
         private static void ReadDatabase()
         {
-            List = new List<Beatmap>();
+            Dictionary = new Dictionary<int, Beatmap>();
             var path = $"{_installationPath}\\osu!.db";
 
             using (var reader = new DatabaseReader(File.OpenRead(path)))
@@ -187,7 +182,7 @@ namespace Klserjht
                         reader.ReadBoolean(); // Whether or not the timing point inherits from the timing point before it.
                     }
 
-                    beatmap.BeatmapId = reader.ReadInt32(); // The beatmap id of the beatmap.
+                    beatmap.Id = reader.ReadInt32(); // The beatmap id of the beatmap.
                     reader.ReadInt32(); // The beatmap set id of the beatmap.
                     reader.ReadInt32(); // ?
 
@@ -220,7 +215,7 @@ namespace Klserjht
 
                     reader.ReadByte(); // The scroll speed on mania of the beatmap.
 
-                    List.Add(beatmap);
+                    if (!Dictionary.ContainsKey(beatmap.Id)) Dictionary.Add(beatmap.Id, beatmap);
                 }
 
                 reader.ReadByte(); // The account rank.
@@ -231,7 +226,6 @@ namespace Klserjht
         {
             public DatabaseReader(Stream input) : base(input)
             {
-
             }
 
             public override string ReadString()

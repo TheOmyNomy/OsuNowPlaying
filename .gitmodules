@@ -1,0 +1,4 @@
+[submodule "ProcessMemoryDataFinder"]
+	path = ProcessMemoryDataFinder
+	url = https://github.com/Piotrekol/ProcessMemoryDataFinder.git
+	branch = master
