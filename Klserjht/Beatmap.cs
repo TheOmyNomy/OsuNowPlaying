@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.IO;
 
 namespace Klserjht
@@ -82,8 +83,6 @@ namespace Klserjht
 
                 for (var i = 0; i < beatmapCount; i++)
                 {
-                    reader.ReadInt32(); // ?
-
                     var beatmap = new Beatmap();
 
                     beatmap.Artist = reader.ReadString(); // The artist of the beatmap (romanised).
@@ -122,50 +121,17 @@ namespace Klserjht
 
                     reader.ReadDouble(); // The slider velocity of the beatmap.
 
-                    if (clientVersion >= 20140609) // ?
+                    if (clientVersion >= 20140609) // The star / difficulty information.
                     {
-                        var length = reader.ReadInt32();
-
-                        for (var j = 0; j < length; j++)
+                        for (var j = 0; j < 4; j++)
                         {
-                            reader.ReadByte();
-                            reader.ReadInt32();
+                            var length = reader.ReadInt32(); // ?
 
-                            reader.ReadByte();
-                            reader.ReadDouble();
-                        }
-
-                        length = reader.ReadInt32();
-
-                        for (var j = 0; j < length; j++)
-                        {
-                            reader.ReadByte();
-                            reader.ReadInt32();
-
-                            reader.ReadByte();
-                            reader.ReadDouble();
-                        }
-
-                        length = reader.ReadInt32();
-
-                        for (var j = 0; j < length; j++)
-                        {
-                            reader.ReadByte();
-                            reader.ReadInt32();
-
-                            reader.ReadByte();
-                            reader.ReadDouble();
-                        }
-
-                        length = reader.ReadInt32();
-
-                        for (var j = 0; j < length; j++)
-                        {
-                            reader.ReadByte();
-                            reader.ReadInt32();
-
-                            reader.ReadByte();
-                            reader.ReadDouble();
+                            for (var k = 0; k < length; k++)
+                            {
+                                reader.ReadObject(); // ?
+                                reader.ReadObject(); // ?
+                            }
                         }
                     }
 
@@ -210,15 +176,13 @@ namespace Klserjht
                     reader.ReadBoolean(); // Whether or not the "disable video" setting is selected.
                     reader.ReadBoolean(); // Whether or not there are visual override(s).
 
-                    if (clientVersion < 20140609) reader.ReadInt16(); // ?
+                    if (clientVersion < 20140609) reader.ReadInt16(); // The background dim of the beatmap.
                     reader.ReadInt32(); // ?
 
                     reader.ReadByte(); // The scroll speed on mania of the beatmap.
 
                     if (!Dictionary.ContainsKey(beatmap.Id)) Dictionary.Add(beatmap.Id, beatmap);
                 }
-
-                reader.ReadByte(); // The account rank.
             }
         }
 
@@ -231,6 +195,64 @@ namespace Klserjht
             public override string ReadString()
             {
                 return ReadByte() == 11 ? base.ReadString() : null;
+            }
+
+            public object ReadObject()
+            {
+                var value = ReadByte();
+                int count;
+
+                switch (value)
+                {
+                    case 1:
+                        return ReadBoolean();
+                    case 2:
+                        return ReadByte();
+                    case 3:
+                        return ReadUInt16();
+                    case 4:
+                        return ReadUInt32();
+                    case 5:
+                        return ReadUInt64();
+                    case 6:
+                        return ReadSByte();
+                    case 7:
+                        return ReadInt16();
+                    case 8:
+                        return ReadInt32();
+                    case 9:
+                        return ReadInt64();
+                    case 10:
+                        return ReadChar();
+                    case 11:
+                        return ReadString();
+                    case 12:
+                        return ReadSingle();
+                    case 13:
+                        return ReadDouble();
+                    case 14:
+                        return ReadDecimal();
+                    case 15:
+                        return ReadInt64();
+                    case 16:
+                        count = ReadInt32();
+
+                        if (count > 0) return ReadBytes(count);
+                        if (count < 0) return null;
+
+                        return new byte[0];
+                    case 17:
+                        count = ReadInt32();
+
+                        if (count > 0) return ReadChars(count);
+                        if (count < 0) return null;
+
+                        return new byte[0];
+                    case 18:
+                        throw new NotImplementedException();
+                    default:
+                        return null;
+                }
             }
         }
     }

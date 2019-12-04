@@ -176,9 +176,7 @@ namespace Klserjht
             var name = e.Message.Split()[0];
             if (!name.Equals(commandTextBox.Text, StringComparison.OrdinalIgnoreCase)) return;
 
-            Beatmap beatmap = Beatmap.Dictionary[_osuMemoryReader.GetMapId()];
-
-            if (beatmap == null)
+            if (!Beatmap.Dictionary.TryGetValue(_osuMemoryReader.GetMapId(), out Beatmap beatmap))
             {
                 // Get the correct capitalisation of their name to use here.
                 _client.SendMessage($"@{_configuration.Channel} Unable to find the current beatmap.");
