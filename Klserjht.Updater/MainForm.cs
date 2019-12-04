@@ -17,6 +17,9 @@ namespace Klserjht.Updater
 
         private void MainForm_Load(object sender, EventArgs e)
         {
+            // Required for Windows 7 and older.
+            ServicePointManager.SecurityProtocol |= SecurityProtocolType.Tls12;
+
             new Thread(() =>
             {
                 var currentFolder = System.Reflection.Assembly.GetExecutingAssembly().Location;

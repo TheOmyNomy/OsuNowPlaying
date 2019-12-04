@@ -28,10 +28,13 @@ namespace Klserjht
         private void MainForm_Load(object sender, EventArgs e)
         {
             Text = $"Klserjht-{Program.Version}";
-            
-            _osuMemoryReader = new OsuMemoryReader();
+
+            // Required for Windows 7 and older.
+            ServicePointManager.SecurityProtocol |= SecurityProtocolType.Tls12;
 
             updateWorker.RunWorkerAsync();
+
+            _osuMemoryReader = new OsuMemoryReader();
             beatmapWorker.RunWorkerAsync();
 
             if (File.Exists(ConfigurationPath))
