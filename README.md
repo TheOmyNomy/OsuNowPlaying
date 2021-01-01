@@ -7,7 +7,7 @@ There is no installation process as Klserjht is a portable application. Click [h
 ## Setup
 Below is an example of Klserjht on its first launch.
 
-![](https://puu.sh/DlqR4/c0b5be8795.png "")
+![](https://nomy.idle.host/x/first-launch-example.png "")
 
 Below contains information regarding each text field and its use.
 
@@ -28,7 +28,7 @@ Below are patterns available for use in the **Format** text field. Patterns will
 
 Below is an example with all the text fields filled out.
 
-![](https://puu.sh/Ca5oI/9712d68804.png "")
+![](https://nomy.idle.host/x/filled-example.png "")
 
 Once all the fields have been filled out, click the **Login** button to login and the application will begin to listen for the command specified and respond with the format specified.
 
@@ -39,5 +39,5 @@ In the instance that the updater can not be found, Klserjht will instead open th
 
 Below is an example with an update available.
 
-![](https://puu.sh/Ca5p9/e45979614a.png "")
+![](https://nomy.idle.host/x/update-available-example.png "")
 
