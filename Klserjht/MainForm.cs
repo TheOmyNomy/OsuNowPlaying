@@ -30,6 +30,13 @@ namespace Klserjht
             ServicePointManager.SecurityProtocol |= SecurityProtocolType.Tls12;
 
             updateWorker.RunWorkerAsync();
+
+            if (!IsOsuProcessAlive())
+            {
+                MessageBox.Show("Please launch osu! first!", Text, MessageBoxButtons.OK, MessageBoxIcon.Error);
+                Environment.Exit(0);
+            }
+            
             _osuMemoryReader = new OsuMemoryReader();
 
             if (File.Exists(ConfigurationPath))
@@ -160,14 +167,21 @@ namespace Klserjht
             var name = e.Message.Split()[0];
             if (!name.Equals(commandTextBox.Text, StringComparison.OrdinalIgnoreCase)) return;
 
+            if (!IsOsuProcessAlive())
+            {
+                _client.SendMessage($"@{_configuration.Channel} osu! is not running!");
+                return;
+            }
+
             var artist = _osuMemoryReader.ReadArtist();
             var title = _osuMemoryReader.ReadTitle();
             var creator = _osuMemoryReader.ReadCreator();
             var version = _osuMemoryReader.ReadVersion();
             var id = _osuMemoryReader.GetMapId();
-
-            if (string.IsNullOrWhiteSpace(artist) || string.IsNullOrWhiteSpace(title) ||
-                string.IsNullOrWhiteSpace(creator) || string.IsNullOrWhiteSpace(version) || id == 0)
+            
+            // Only return an error if all song information is empty (some songs don't have an artist, creator, etc.).
+            if (string.IsNullOrWhiteSpace(artist) && string.IsNullOrWhiteSpace(title) &&
+                string.IsNullOrWhiteSpace(creator) && string.IsNullOrWhiteSpace(version))
             {
                 _client.SendMessage($"@{_configuration.Channel} Unable to find the current beatmap.");
                 return;
@@ -200,5 +214,7 @@ namespace Klserjht
                                   channelTextBox.Text.Length <= 25 && formatTextBox.Text.Length > 0 &&
                                   commandTextBox.Text.Length > 0;
         }
+
+        private bool IsOsuProcessAlive() => Process.GetProcessesByName("osu!").Length > 0;
     }
 }
