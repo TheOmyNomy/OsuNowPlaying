@@ -189,7 +189,7 @@ namespace Klserjht
             
             if (name.Equals(commandTextBox.Text, StringComparison.OrdinalIgnoreCase))
             {
-                var response = formatTextBox.Text.Replace("!artist!", artist).Replace("!title", title)
+                var response = formatTextBox.Text.Replace("!artist!", artist).Replace("!title!", title)
                     .Replace("!creator!", creator).Replace("!version!", version)
                     .Replace("!link!", "https://osu.ppy.sh/b/" + id).Replace("!sender!", e.Sender);
 
