@@ -5,7 +5,6 @@ using System.IO;
 using System.Net;
 using System.Windows.Forms;
 using Newtonsoft.Json;
-using OsuMemoryDataProvider;
 
 namespace Klserjht
 {
@@ -13,8 +12,6 @@ namespace Klserjht
     {
         private TwitchClient _client;
         private Configuration _configuration;
-
-        private bool _isLoaded;
 
         private const string ConfigurationPath = "Klserjht.json";
 
@@ -33,9 +30,7 @@ namespace Klserjht
             ServicePointManager.SecurityProtocol |= SecurityProtocolType.Tls12;
 
             updateWorker.RunWorkerAsync();
-
             _osuMemoryReader = new OsuMemoryReader();
-            beatmapWorker.RunWorkerAsync();
 
             if (File.Exists(ConfigurationPath))
             {
@@ -48,7 +43,10 @@ namespace Klserjht
                 formatTextBox.Text = _configuration.Format;
                 commandTextBox.Text = _configuration.Command;
 
-                loginButton.Select();
+                UpdateLoginButtonStatus();
+                
+                if (loginButton.Enabled) loginButton.Select();
+                else usernameTextBox.Select(0, 0);
             }
             else
             {
@@ -86,10 +84,7 @@ namespace Klserjht
 
         private void textBox_TextChanged(object sender, EventArgs e)
         {
-            if (_client == null || !_client.Connected) loginButton.Enabled = _isLoaded && usernameTextBox.Text.Length >= 4 && usernameTextBox.Text.Length <= 25 &&
-                                  tokenTextBox.Text.Length == 36 && channelTextBox.Text.Length >= 4 &&
-                                  channelTextBox.Text.Length <= 25 && formatTextBox.Text.Length > 0 &&
-                                  commandTextBox.Text.Length > 0;
+            if (_client == null || !_client.Connected) UpdateLoginButtonStatus();
         }
 
         private void textBox_KeyDown(object sender, KeyEventArgs e)
@@ -160,37 +155,29 @@ namespace Klserjht
             }
         }
 
-        private void beatmapWorker_DoWork(object sender, DoWorkEventArgs e)
-        {
-            Beatmap.Initialise();
-            _isLoaded = true;
-
-            loginButton.BeginInvoke((Action)(() =>
-            {
-                loginButton.Enabled = _isLoaded && usernameTextBox.Text.Length >= 4 && usernameTextBox.Text.Length <= 25 &&
-                                      tokenTextBox.Text.Length == 36 && channelTextBox.Text.Length >= 4 &&
-                                      channelTextBox.Text.Length <= 25 && formatTextBox.Text.Length > 0 &&
-                                      commandTextBox.Text.Length > 0;
-            }));
-        }
-
         private void _client_OnMessageReceived(object sender, TwitchClient.OnMessageReceivedArgs e)
         {
             var name = e.Message.Split()[0];
             if (!name.Equals(commandTextBox.Text, StringComparison.OrdinalIgnoreCase)) return;
 
-            if (!Beatmap.Dictionary.TryGetValue(_osuMemoryReader.GetMapId(), out Beatmap beatmap))
+            var artist = _osuMemoryReader.ReadArtist();
+            var title = _osuMemoryReader.ReadTitle();
+            var creator = _osuMemoryReader.ReadCreator();
+            var version = _osuMemoryReader.ReadVersion();
+            var id = _osuMemoryReader.GetMapId();
+
+            if (string.IsNullOrWhiteSpace(artist) || string.IsNullOrWhiteSpace(title) ||
+                string.IsNullOrWhiteSpace(creator) || string.IsNullOrWhiteSpace(version) || id == 0)
             {
-                // Get the correct capitalisation of their name to use here.
                 _client.SendMessage($"@{_configuration.Channel} Unable to find the current beatmap.");
                 return;
             }
-
+            
             if (name.Equals(commandTextBox.Text, StringComparison.OrdinalIgnoreCase))
             {
-                var response = formatTextBox.Text.Replace("!artist!", beatmap.Artist).Replace("!title", beatmap.Title)
-                    .Replace("!creator!", beatmap.Creator).Replace("!version!", beatmap.Version)
-                    .Replace("!link!", "https://osu.ppy.sh/b/" + beatmap.Id).Replace("!sender!", e.Sender);
+                var response = formatTextBox.Text.Replace("!artist!", artist).Replace("!title", title)
+                    .Replace("!creator!", creator).Replace("!version!", version)
+                    .Replace("!link!", "https://osu.ppy.sh/b/" + id).Replace("!sender!", e.Sender);
 
                 _client.SendMessage(response);
             }
@@ -204,6 +191,14 @@ namespace Klserjht
             _client = new TwitchClient(usernameTextBox.Text, tokenTextBox.Text, channelTextBox.Text);
             _client.OnMessageReceived += _client_OnMessageReceived;
             usernameTextBox.Enabled = tokenTextBox.Enabled = channelTextBox.Enabled = loginButton.Enabled = !_client.Connect();
+        }
+
+        private void UpdateLoginButtonStatus()
+        {
+            loginButton.Enabled = usernameTextBox.Text.Length >= 4 && usernameTextBox.Text.Length <= 25 &&
+                                  tokenTextBox.Text.Length == 36 && channelTextBox.Text.Length >= 4 &&
+                                  channelTextBox.Text.Length <= 25 && formatTextBox.Text.Length > 0 &&
+                                  commandTextBox.Text.Length > 0;
         }
     }
 }

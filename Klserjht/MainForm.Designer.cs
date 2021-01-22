@@ -43,7 +43,6 @@
             this.helpLinkLabel = new System.Windows.Forms.LinkLabel();
             this.updateLinkLabel = new System.Windows.Forms.LinkLabel();
             this.updateWorker = new System.ComponentModel.BackgroundWorker();
-            this.beatmapWorker = new System.ComponentModel.BackgroundWorker();
             this.SuspendLayout();
             // 
             // usernameLabel
@@ -186,10 +185,6 @@
             // 
             this.updateWorker.DoWork += new System.ComponentModel.DoWorkEventHandler(this.updateWorker_DoWork);
             // 
-            // beatmapWorker
-            // 
-            this.beatmapWorker.DoWork += new System.ComponentModel.DoWorkEventHandler(this.beatmapWorker_DoWork);
-            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -239,7 +234,6 @@
         private System.Windows.Forms.LinkLabel helpLinkLabel;
         private System.Windows.Forms.LinkLabel updateLinkLabel;
         private System.ComponentModel.BackgroundWorker updateWorker;
-        private System.ComponentModel.BackgroundWorker beatmapWorker;
     }
 }
 
