@@ -11,7 +11,6 @@ namespace Klserjht
     public partial class MainForm : Form
     {
         private TwitchClient _client;
-        private Configuration _configuration;
 
         private const string ConfigurationPath = "Klserjht.json";
 
@@ -42,13 +41,13 @@ namespace Klserjht
             if (File.Exists(ConfigurationPath))
             {
                 var contents = File.ReadAllText(ConfigurationPath);
-                _configuration = JsonConvert.DeserializeObject<Configuration>(contents);
+                Configuration configuration = JsonConvert.DeserializeObject<Configuration>(contents);
 
-                usernameTextBox.Text = _configuration.Username;
-                tokenTextBox.Text = _configuration.Token;
-                channelTextBox.Text = _configuration.Channel;
-                formatTextBox.Text = _configuration.Format;
-                commandTextBox.Text = _configuration.Command;
+                usernameTextBox.Text = configuration.Username;
+                tokenTextBox.Text = configuration.Token;
+                channelTextBox.Text = configuration.Channel;
+                formatTextBox.Text = configuration.Format;
+                commandTextBox.Text = configuration.Command;
 
                 UpdateLoginButtonStatus();
                 
@@ -71,22 +70,7 @@ namespace Klserjht
 
         private void MainForm_FormClosing(object sender, FormClosingEventArgs e)
         {
-            if (_client != null && _client.Connected)
-            {
-                _client.Disconnect();
-
-                _configuration = new Configuration
-                {
-                    Username = usernameTextBox.Text,
-                    Token = tokenTextBox.Text,
-                    Channel = channelTextBox.Text,
-                    Format = formatTextBox.Text,
-                    Command = commandTextBox.Text
-                };
-
-                var contents = JsonConvert.SerializeObject(_configuration, Formatting.Indented);
-                File.WriteAllText(ConfigurationPath, contents);
-            }
+            Save();
         }
 
         private void textBox_TextChanged(object sender, EventArgs e)
@@ -119,6 +103,7 @@ namespace Klserjht
         private void loginButton_Click(object sender, EventArgs e)
         {
             Login();
+            Save();
         }
 
         private void exitButton_Click(object sender, EventArgs e)
@@ -169,7 +154,7 @@ namespace Klserjht
 
             if (!IsOsuProcessAlive())
             {
-                _client.SendMessage($"@{_configuration.Channel} osu! is not running!");
+                _client.SendMessage($"@{channelTextBox.Text} osu! is not running!");
                 return;
             }
 
@@ -183,7 +168,7 @@ namespace Klserjht
             if (string.IsNullOrWhiteSpace(artist) && string.IsNullOrWhiteSpace(title) &&
                 string.IsNullOrWhiteSpace(creator) && string.IsNullOrWhiteSpace(version))
             {
-                _client.SendMessage($"@{_configuration.Channel} Unable to find the current beatmap.");
+                _client.SendMessage($"@{channelTextBox.Text} Unable to find the current beatmap.");
                 return;
             }
             
@@ -216,5 +201,20 @@ namespace Klserjht
         }
 
         private bool IsOsuProcessAlive() => Process.GetProcessesByName("osu!").Length > 0;
+
+        private void Save()
+        {
+            Configuration configuration = new Configuration
+            {
+                Username = usernameTextBox.Text,
+                Token = tokenTextBox.Text,
+                Channel = channelTextBox.Text,
+                Format = formatTextBox.Text,
+                Command = commandTextBox.Text
+            };
+
+            var contents = JsonConvert.SerializeObject(configuration, Formatting.Indented);
+            File.WriteAllText(ConfigurationPath, contents);
+        }
     }
 }
