@@ -93,6 +93,10 @@ namespace Klserjht
 
         public bool Disconnect()
         {
+            _writer.WriteLine($"PART {Channel}");
+            _writer.WriteLine("QUIT");
+            _writer.Flush();
+
             _thread.Abort();
 
             _writer.Close();

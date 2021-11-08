@@ -68,8 +68,9 @@ namespace Klserjht
             if (e.KeyCode.Equals(Keys.Escape)) Close();
         }
 
-        private void MainForm_FormClosing(object sender, FormClosingEventArgs e)
+        private void MainForm_Closing(object sender, CancelEventArgs e)
         {
+            _client?.Disconnect();
             Save();
         }
 
