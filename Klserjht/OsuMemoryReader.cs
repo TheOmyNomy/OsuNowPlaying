@@ -27,7 +27,7 @@ namespace Klserjht
             Signatures.Add(_versionId, new SigEx
             {
                 ParentSig = Signatures[_currentBeatmapDataId],
-                PointerOffsets = { 0xA8 }
+                PointerOffsets = { 0xAC }
             });
         }
 
