@@ -1,5 +1,8 @@
-﻿using System.Runtime.InteropServices;
+﻿using System;
+using System.Runtime.InteropServices;
 using System.Windows;
+using Microsoft.Extensions.DependencyInjection;
+using OsuNowPlaying.Config;
 
 namespace OsuNowPlaying;
 
@@ -12,13 +15,29 @@ public partial class App
 
 	[DllImport("kernel32.dll", SetLastError = true, ExactSpelling = true)]
 	private static extern bool FreeConsole();
+#endif
 
-	protected override void OnStartup(StartupEventArgs e)
+	private readonly IServiceProvider _serviceProvider;
+
+	public App()
 	{
-		AllocConsole();
-		base.OnStartup(e);
+		_serviceProvider = new ServiceCollection()
+			.AddSingleton<Configuration>()
+			.AddSingleton<MainWindow>()
+			.BuildServiceProvider();
 	}
 
+	private void OnStartup(object sender, StartupEventArgs e)
+	{
+#if DEBUG
+		AllocConsole();
+#endif
+
+		_serviceProvider.GetRequiredService<Configuration>();
+		_serviceProvider.GetRequiredService<MainWindow>().Show();
+	}
+
+#if DEBUG
 	protected override void OnExit(ExitEventArgs e)
 	{
 		FreeConsole();
