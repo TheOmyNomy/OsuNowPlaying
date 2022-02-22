@@ -1,5 +1,7 @@
-﻿using System.IO;
+﻿using System;
+using System.IO;
 using System.Net.Sockets;
+using System.Threading;
 using System.Threading.Tasks;
 using AsyncAwaitBestPractices;
 using OsuNowPlaying.Utilities;
@@ -15,14 +17,16 @@ public class TwitchClient
 	private StreamReader _reader = null!;
 	private StreamWriter _writer = null!;
 
-	private bool _shouldDisconnect;
+	private CancellationTokenSource? _cancellationTokenSource;
 
-	public bool Connected => (_client?.Connected ?? false) && !_shouldDisconnect;
+	public bool Connected => (_client?.Connected ?? false) && (!_cancellationTokenSource?.IsCancellationRequested ?? false);
 
 	public async Task ConnectAsync(string username, string token)
 	{
 		if (Connected)
 			return;
+
+		_cancellationTokenSource = new CancellationTokenSource();
 
 		_client = new TcpClient();
 		await _client.ConnectAsync(Hostname, Port);
@@ -46,14 +50,26 @@ public class TwitchClient
 
 	public void Disconnect()
 	{
-		_shouldDisconnect = true;
+		_cancellationTokenSource?.Cancel();
 	}
 
 	private async Task ListenerAsync()
 	{
 		while (Connected)
 		{
-			string? line = await _reader.ReadLineAsync();
+			string? line;
+
+			try
+			{
+				line = await _reader.ReadLineAsync().WaitAsync(_cancellationTokenSource!.Token);
+			}
+			catch (Exception)
+			{
+				if (_cancellationTokenSource!.IsCancellationRequested)
+					break;
+
+				throw;
+			}
 
 			if (string.IsNullOrWhiteSpace(line))
 				continue;
@@ -87,9 +103,13 @@ public class TwitchClient
 		}
 
 		if (_client!.Connected)
+		{
+			await _writer.WriteLineAsync("QUIT");
 			_client.Close();
+		}
 
-		_shouldDisconnect = false;
+		if (!_cancellationTokenSource!.IsCancellationRequested)
+			_cancellationTokenSource.Cancel();
 	}
 
 	private async Task ProcessPingCommandAsync(string[] parameters)
