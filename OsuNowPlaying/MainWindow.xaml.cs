@@ -1,15 +1,20 @@
 ﻿using System.Windows;
+using AsyncAwaitBestPractices;
+using OsuNowPlaying.Client;
 using OsuNowPlaying.Config;
+using OsuNowPlaying.Utilities;
 
 namespace OsuNowPlaying;
 
 public partial class MainWindow
 {
 	private readonly Configuration _configuration;
+	private readonly TwitchClient _twitchClient;
 
 	public MainWindow(Configuration configuration)
 	{
 		_configuration = configuration;
+		_twitchClient = new TwitchClient();
 
 		InitializeComponent();
 		Loaded += OnLoaded;
@@ -34,7 +39,7 @@ public partial class MainWindow
 		_configuration.SetValue(ConfigurationSetting.Username, username);
 		_configuration.SetValue(ConfigurationSetting.Token, token);
 
-		// TODO: Connect to the IRC server with the given username and token.
+		_twitchClient.ConnectAsync(username, token).SafeFireAndForget(Logger.Error);
 
 		// TODO: Only save if authentication was successful.
 		_configuration.Save();
@@ -42,6 +47,9 @@ public partial class MainWindow
 
 	private void OnExitButtonClick(object sender, RoutedEventArgs e)
 	{
+		if (_twitchClient.Connected)
+			_twitchClient.Disconnect();
+
 		Application.Current.Shutdown();
 	}
 }
