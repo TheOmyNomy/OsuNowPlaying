@@ -48,7 +48,7 @@
                 <PasswordBox Grid.Column="1" Grid.Row="1" Width="175" Margin="5,0,0,5" Name="TokenTextBox"
                              PasswordChar="*" />
 
-                <Button Grid.Column="2" Grid.Row="0" Width="75" Margin="5,0,0,5" Content="Login"
+                <Button Grid.Column="2" Grid.Row="0" Width="75" Margin="5,0,0,5" Name="LoginButton" Content="Login"
                         Click="OnLoginButtonClick" />
                 <Button Grid.Column="2" Grid.Row="1" Width="75" Margin="5,0,0,5" Content="Exit"
                         Click="OnExitButtonClick" />

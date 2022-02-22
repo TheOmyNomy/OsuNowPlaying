@@ -4,6 +4,7 @@ using System.Net.Sockets;
 using System.Threading;
 using System.Threading.Tasks;
 using AsyncAwaitBestPractices;
+using OsuNowPlaying.Client.Events;
 using OsuNowPlaying.Utilities;
 
 namespace OsuNowPlaying.Client;
@@ -13,23 +14,30 @@ public class TwitchClient
 	private const string Hostname = "irc.chat.twitch.tv";
 	private const int Port = 6667;
 
+	public event EventHandler<ConnectedEventArgs>? Connected;
+	public event EventHandler<AuthenticationSuccessfulEventArgs>? AuthenticationSuccessful;
+	public event EventHandler<AuthenticationFailedEventArgs>? AuthenticationFailed;
+	public event EventHandler<DisconnectedEventArgs>? Disconnected;
+
 	private TcpClient? _client;
 	private StreamReader _reader = null!;
 	private StreamWriter _writer = null!;
 
 	private CancellationTokenSource? _cancellationTokenSource;
 
-	public bool Connected => (_client?.Connected ?? false) && (!_cancellationTokenSource?.IsCancellationRequested ?? false);
+	public bool IsConnected => (_client?.Connected ?? false) && (!_cancellationTokenSource?.IsCancellationRequested ?? false);
 
 	public async Task ConnectAsync(string username, string token)
 	{
-		if (Connected)
+		if (IsConnected)
 			return;
 
 		_cancellationTokenSource = new CancellationTokenSource();
 
 		_client = new TcpClient();
 		await _client.ConnectAsync(Hostname, Port);
+
+		Connected?.Invoke(this, new ConnectedEventArgs());
 
 		_reader = new StreamReader(_client.GetStream());
 
@@ -39,7 +47,11 @@ public class TwitchClient
 			AutoFlush = true
 		};
 
-		ListenerAsync().SafeFireAndForget(Logger.Error);
+		ListenerAsync().SafeFireAndForget(exception =>
+		{
+			Logger.Error(exception);
+			Disconnected?.Invoke(this, new DisconnectedEventArgs());
+		});
 
 		await _writer.WriteLineAsync($"PASS {token}");
 		await _writer.WriteLineAsync($"NICK {username.ToLower()}");
@@ -55,7 +67,7 @@ public class TwitchClient
 
 	private async Task ListenerAsync()
 	{
-		while (Connected)
+		while (IsConnected)
 		{
 			string? line;
 
@@ -91,15 +103,19 @@ public class TwitchClient
 
 			switch (command)
 			{
+				case "001":
+					await Process001CommandAsync();
+					break;
+				case "NOTICE":
+					await ProcessNoticeCommandAsync(parameters);
+					break;
 				case "PING":
 					await ProcessPingCommandAsync(parameters);
 					break;
 				default:
 					Logger.Warning($"Command \"{command}\" wasn't handled.");
-					continue;
+					break;
 			}
-
-			Logger.Information($"Command \"{command}\" was handled.");
 		}
 
 		if (_client!.Connected)
@@ -108,8 +124,27 @@ public class TwitchClient
 			_client.Close();
 		}
 
-		if (!_cancellationTokenSource!.IsCancellationRequested)
-			_cancellationTokenSource.Cancel();
+		Disconnected?.Invoke(this, new DisconnectedEventArgs());
+	}
+
+	private Task Process001CommandAsync()
+	{
+		AuthenticationSuccessful?.Invoke(this, new AuthenticationSuccessfulEventArgs());
+		return Task.CompletedTask;
+	}
+
+	private Task ProcessNoticeCommandAsync(string[] parameters)
+	{
+		// string[] receivers = parameters[0].Split(',');
+		string message = string.Join(' ', parameters[1..])[1..];
+
+		if (message == "Improperly formatted auth")
+		{
+			AuthenticationFailed?.Invoke(this, new AuthenticationFailedEventArgs());
+			Disconnect();
+		}
+
+		return Task.CompletedTask;
 	}
 
 	private async Task ProcessPingCommandAsync(string[] parameters)
