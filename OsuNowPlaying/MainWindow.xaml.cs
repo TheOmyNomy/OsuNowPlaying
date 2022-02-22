@@ -17,6 +17,8 @@ public partial class MainWindow
 		_configuration = configuration;
 
 		_twitchClient = new TwitchClient();
+
+		_twitchClient.Connected += OnTwitchClientConnected;
 		_twitchClient.AuthenticationSuccessful += OnTwitchClientAuthenticationSuccessful;
 		_twitchClient.AuthenticationFailed += OnTwitchClientAuthenticationFailed;
 		_twitchClient.Disconnected += OnTwitchClientDisconnected;
@@ -31,10 +33,19 @@ public partial class MainWindow
 		TokenTextBox.Password = _configuration.GetValue<string>(ConfigurationSetting.Token);
 	}
 
+	private void OnTwitchClientConnected(object? sender, ConnectedEventArgs e)
+	{
+		StatusTextBlock.Text = "Status: Authenticating...";
+	}
+
 	private void OnTwitchClientAuthenticationSuccessful(object? sender, AuthenticationSuccessfulEventArgs e)
 	{
 		// We've successfully connected to the IRC server and authenticated
 		// with the specified username and token.
+
+		_configuration.Save();
+
+		StatusTextBlock.Text = "Status: Online";
 
 		// We can now allow the user to disconnect / logout.
 		LoginButton.Content = "Logout";
@@ -59,6 +70,8 @@ public partial class MainWindow
 		// we must wrap UI calls inside of a Dispatcher.Invoke() action.
 		Dispatcher.Invoke(() =>
 		{
+			StatusTextBlock.Text = "Status: Offline";
+
 			LoginButton.Content = "Login";
 			LoginButton.IsEnabled = true;
 		});
@@ -88,14 +101,13 @@ public partial class MainWindow
 		_configuration.SetValue(ConfigurationSetting.Username, username);
 		_configuration.SetValue(ConfigurationSetting.Token, token);
 
+		StatusTextBlock.Text = "Status: Connecting...";
+
 		_twitchClient.ConnectAsync(username, token).SafeFireAndForget(exception =>
 		{
 			Logger.Error(exception);
 			LoginButton.IsEnabled = true;
 		});
-
-		// TODO: Only save if authentication was successful.
-		_configuration.Save();
 	}
 
 	private void OnExitButtonClick(object sender, RoutedEventArgs e)

@@ -64,7 +64,8 @@
                             <RowDefinition Height="Auto" />
                         </Grid.RowDefinitions>
 
-                        <TextBlock Grid.Column="0" Grid.Row="0" Margin="0,0,50,0" Text="Status: Offline" />
+                        <TextBlock Grid.Column="0" Grid.Row="0" Margin="0,0,50,0" Name="StatusTextBlock"
+                                   Text="Status: Offline" />
                         <CheckBox Grid.Column="1" Grid.Row="0" Content="Advanced" IsEnabled="False" />
                     </Grid>
                 </GroupBox>
