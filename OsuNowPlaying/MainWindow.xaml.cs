@@ -37,26 +37,18 @@ public partial class MainWindow
 
 	private void OnTwitchClientConnected(object? sender, ConnectedEventArgs e)
 	{
-		StatusTextBlock.Text = "Status: Authenticating...";
+		SetState(ConnectionState.Authenticating);
 	}
 
 	private void OnTwitchClientAuthenticated(object? sender, AuthenticatedEventArgs e)
 	{
-		// We've successfully connected to the IRC server and authenticated
-		// with the specified username and token.
-
-		StatusTextBlock.Text = "Status: Joining...";
+		SetState(ConnectionState.Joining);
 	}
 
 	private void OnTwitchClientChannelJoined(object? sender, ChannelJoinedEventArgs e)
 	{
 		_configuration.Save();
-
-		StatusTextBlock.Text = "Status: Online";
-
-		// We can now allow the user to disconnect / logout.
-		LoginButton.Content = "Logout";
-		LoginButton.IsEnabled = true;
+		SetState(ConnectionState.Online);
 	}
 
 	private void OnTwitchClientMessageReceived(object? sender, MessageReceivedEventArgs e)
@@ -72,19 +64,8 @@ public partial class MainWindow
 
 	private void OnTwitchClientDisconnected(object? sender, DisconnectedEventArgs e)
 	{
-		// We've disconnected from the IRC server.
-
 		// TODO: Display why we were disconnected if it wasn't a normal disconnection.
-
-		// Since this event can be called from a different thread,
-		// we must wrap UI calls inside of a Dispatcher.Invoke() action.
-		Dispatcher.Invoke(() =>
-		{
-			StatusTextBlock.Text = "Status: Offline";
-
-			LoginButton.Content = "Login";
-			LoginButton.IsEnabled = true;
-		});
+		Dispatcher.Invoke(() => SetState(ConnectionState.Offline));
 	}
 
 	private void OnLoginButtonClick(object sender, RoutedEventArgs e)
@@ -95,7 +76,7 @@ public partial class MainWindow
 			return;
 		}
 
-		LoginButton.IsEnabled = false;
+		SetState(ConnectionState.Connecting);
 
 		string username = UsernameTextBox.Text;
 		string token = TokenTextBox.Password;
@@ -104,19 +85,17 @@ public partial class MainWindow
 		// TODO: Add UI feedback for validation.
 		if (string.IsNullOrWhiteSpace(username) || string.IsNullOrWhiteSpace(token))
 		{
-			LoginButton.IsEnabled = true;
+			SetState(ConnectionState.Offline);
 			return;
 		}
 
 		_configuration.SetValue(ConfigurationSetting.Username, username);
 		_configuration.SetValue(ConfigurationSetting.Token, token);
 
-		StatusTextBlock.Text = "Status: Connecting...";
-
 		_twitchClient.ConnectAsync(username, token).SafeFireAndForget(exception =>
 		{
 			Logger.Error(exception);
-			LoginButton.IsEnabled = true;
+			SetState(ConnectionState.Offline);
 		});
 	}
 
@@ -124,5 +103,49 @@ public partial class MainWindow
 	{
 		_twitchClient.DisconnectAsync().GetAwaiter().GetResult();
 		Application.Current.Shutdown();
+	}
+
+	private void SetState(ConnectionState state)
+	{
+		switch (state)
+		{
+			case ConnectionState.Connecting:
+				UsernameTextBox.IsEnabled = false;
+				TokenTextBox.IsEnabled = false;
+				LoginButton.IsEnabled = false;
+
+				StatusTextBlock.Text = "Status: Connecting...";
+				break;
+			case ConnectionState.Authenticating:
+				StatusTextBlock.Text = "Status: Authenticating...";
+				break;
+			case ConnectionState.Joining:
+				StatusTextBlock.Text = "Status: Joining...";
+				break;
+			case ConnectionState.Online:
+				LoginButton.Content = "Logout";
+				LoginButton.IsEnabled = true;
+
+				StatusTextBlock.Text = "Status: Online";
+				break;
+			default:
+				UsernameTextBox.IsEnabled = true;
+				TokenTextBox.IsEnabled = true;
+
+				LoginButton.Content = "Login";
+				LoginButton.IsEnabled = true;
+
+				StatusTextBlock.Text = "Status: Offline";
+				break;
+		}
+	}
+
+	private enum ConnectionState
+	{
+		Offline,
+		Connecting,
+		Authenticating,
+		Joining,
+		Online
 	}
 }
