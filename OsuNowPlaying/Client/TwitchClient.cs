@@ -112,6 +112,14 @@ public class TwitchClient
 				case "PING":
 					await ProcessPingCommandAsync(parameters);
 					break;
+				case "002":
+				case "003":
+				case "004":
+				case "372":
+				case "375":
+				case "376":
+					// Ignore commands that don't require any action or response.
+					break;
 				default:
 					Logger.Warning($"Command \"{command}\" wasn't handled.");
 					break;
