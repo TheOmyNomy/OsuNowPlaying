@@ -17,6 +17,7 @@ public class TwitchClient
 	public event EventHandler<ConnectedEventArgs>? Connected;
 	public event EventHandler<AuthenticatedEventArgs>? Authenticated;
 	public event EventHandler<ChannelJoinedEventArgs>? ChannelJoined;
+	public event EventHandler<MessageReceivedEventArgs>? MessageReceived;
 	public event EventHandler<DisconnectedEventArgs>? Disconnected;
 
 	private TcpClient? _client;
@@ -134,6 +135,9 @@ public class TwitchClient
 				case "PING":
 					await ProcessPingCommandAsync(parameters);
 					break;
+				case "PRIVMSG":
+					await ProcessPrivateMessageCommandAsync(prefix, parameters);
+					break;
 				case "002":
 				case "003":
 				case "004":
@@ -198,5 +202,20 @@ public class TwitchClient
 	private async Task ProcessPingCommandAsync(string[] parameters)
 	{
 		await _writer.WriteLineAsync($"PONG {parameters[0]}");
+	}
+
+	private Task ProcessPrivateMessageCommandAsync(string? prefix, string[] parameters)
+	{
+		if (string.IsNullOrWhiteSpace(prefix))
+			return Task.CompletedTask;
+
+		string sender = prefix.Split('!')[0][1..];
+
+		// string[] receivers = parameters[0].Split(',');
+		string message = string.Join(' ', parameters[1..])[1..];
+
+		MessageReceived?.Invoke(this, new MessageReceivedEventArgs(sender, message));
+
+		return Task.CompletedTask;
 	}
 }
