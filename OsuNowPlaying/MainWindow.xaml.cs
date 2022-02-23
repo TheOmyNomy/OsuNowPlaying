@@ -43,18 +43,18 @@ public partial class MainWindow
 		// We've successfully connected to the IRC server and authenticated
 		// with the specified username and token.
 
-		_configuration.Save();
-
 		StatusTextBlock.Text = "Status: Joining...";
-
-		// We can now allow the user to disconnect / logout.
-		LoginButton.Content = "Logout";
-		LoginButton.IsEnabled = true;
 	}
 
 	private void OnTwitchClientChannelJoined(object? sender, ChannelJoinedEventArgs e)
 	{
+		_configuration.Save();
+
 		StatusTextBlock.Text = "Status: Online";
+
+		// We can now allow the user to disconnect / logout.
+		LoginButton.Content = "Logout";
+		LoginButton.IsEnabled = true;
 	}
 
 	private void OnTwitchClientDisconnected(object? sender, DisconnectedEventArgs e)
