@@ -56,7 +56,9 @@ public partial class MainWindow
 		string command = _configuration.GetValue<string>(ConfigurationSetting.Command);
 		string format = _configuration.GetValue<string>(ConfigurationSetting.Format);
 
-		if (!e.Message.StartsWith(command, StringComparison.OrdinalIgnoreCase))
+		string firstPart = e.Message.Split()[0].Trim();
+
+		if (!firstPart.Equals(command, StringComparison.OrdinalIgnoreCase))
 			return;
 
 		_twitchClient.SendMessageAsync(format).GetAwaiter().GetResult();
