@@ -21,6 +21,7 @@ public partial class MainWindow
 		_twitchClient.Connected += OnTwitchClientConnected;
 		_twitchClient.AuthenticationSuccessful += OnTwitchClientAuthenticationSuccessful;
 		_twitchClient.AuthenticationFailed += OnTwitchClientAuthenticationFailed;
+		_twitchClient.ChannelJoined += OnTwitchClientChannelJoined;
 		_twitchClient.Disconnected += OnTwitchClientDisconnected;
 
 		InitializeComponent();
@@ -45,7 +46,7 @@ public partial class MainWindow
 
 		_configuration.Save();
 
-		StatusTextBlock.Text = "Status: Online";
+		StatusTextBlock.Text = "Status: Joining...";
 
 		// We can now allow the user to disconnect / logout.
 		LoginButton.Content = "Logout";
@@ -58,6 +59,11 @@ public partial class MainWindow
 		// the username and / or the token was incorrect.
 
 		// TODO: Display why authentication was unsuccessful.
+	}
+
+	private void OnTwitchClientChannelJoined(object? sender, ChannelJoinedEventArgs e)
+	{
+		StatusTextBlock.Text = "Status: Online";
 	}
 
 	private void OnTwitchClientDisconnected(object? sender, DisconnectedEventArgs e)

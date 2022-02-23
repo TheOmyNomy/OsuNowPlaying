@@ -17,6 +17,7 @@ public class TwitchClient
 	public event EventHandler<ConnectedEventArgs>? Connected;
 	public event EventHandler<AuthenticationSuccessfulEventArgs>? AuthenticationSuccessful;
 	public event EventHandler<AuthenticationFailedEventArgs>? AuthenticationFailed;
+	public event EventHandler<ChannelJoinedEventArgs>? ChannelJoined;
 	public event EventHandler<DisconnectedEventArgs>? Disconnected;
 
 	private TcpClient? _client;
@@ -24,8 +25,11 @@ public class TwitchClient
 	private StreamWriter _writer = null!;
 
 	private CancellationTokenSource? _cancellationTokenSource;
+	private bool _hasJoinedChannel;
 
 	public bool IsConnected => (_client?.Connected ?? false) && (!_cancellationTokenSource?.IsCancellationRequested ?? false);
+
+	private string _channel = null!;
 
 	public async Task ConnectAsync(string username, string token)
 	{
@@ -46,6 +50,8 @@ public class TwitchClient
 			NewLine = "\r\n",
 			AutoFlush = true
 		};
+
+		_channel = (username.StartsWith('#') ? username : '#' + username).ToLower();
 
 		ListenerAsync().SafeFireAndForget(exception =>
 		{
@@ -106,6 +112,9 @@ public class TwitchClient
 				case "001":
 					await Process001CommandAsync();
 					break;
+				case "JOIN":
+					await ProcessJoinCommandAsync();
+					break;
 				case "NOTICE":
 					await ProcessNoticeCommandAsync(parameters);
 					break;
@@ -115,6 +124,8 @@ public class TwitchClient
 				case "002":
 				case "003":
 				case "004":
+				case "353":
+				case "366":
 				case "372":
 				case "375":
 				case "376":
@@ -135,9 +146,33 @@ public class TwitchClient
 		Disconnected?.Invoke(this, new DisconnectedEventArgs());
 	}
 
-	private Task Process001CommandAsync()
+	private async Task Process001CommandAsync()
 	{
 		AuthenticationSuccessful?.Invoke(this, new AuthenticationSuccessfulEventArgs());
+		await _writer.WriteLineAsync($"JOIN {_channel}");
+
+		Task.Run(async () =>
+		{
+			DateTime startTime = DateTime.UtcNow;
+			TimeSpan waitDuration = TimeSpan.FromSeconds(5);
+
+			while (DateTime.UtcNow - startTime < waitDuration)
+			{
+				if (_hasJoinedChannel)
+					return;
+
+				await Task.Delay(250);
+			}
+
+			Disconnect();
+		}).SafeFireAndForget();
+	}
+
+	private Task ProcessJoinCommandAsync()
+	{
+		_hasJoinedChannel = true;
+		ChannelJoined?.Invoke(this, new ChannelJoinedEventArgs());
+
 		return Task.CompletedTask;
 	}
 
