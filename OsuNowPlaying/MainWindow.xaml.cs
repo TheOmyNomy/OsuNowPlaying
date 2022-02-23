@@ -11,12 +11,15 @@ namespace OsuNowPlaying;
 public partial class MainWindow
 {
 	private readonly Configuration _configuration;
+
+	private readonly StructuredOsuMemoryReader _osuMemoryReader;
 	private readonly TwitchClient _twitchClient;
 
 	public MainWindow(Configuration configuration)
 	{
 		_configuration = configuration;
 
+		_osuMemoryReader = new StructuredOsuMemoryReader();
 		_twitchClient = new TwitchClient();
 
 		_twitchClient.Connected += OnTwitchClientConnected;
@@ -61,7 +64,15 @@ public partial class MainWindow
 		if (!firstPart.Equals(command, StringComparison.OrdinalIgnoreCase))
 			return;
 
-		_twitchClient.SendMessageAsync(format).GetAwaiter().GetResult();
+		string response = format
+			.Replace("!artist!", _osuMemoryReader.ReadBeatmapArtist(), StringComparison.OrdinalIgnoreCase)
+			.Replace("!title!", _osuMemoryReader.ReadBeatmapTitle(), StringComparison.OrdinalIgnoreCase)
+			.Replace("!creator!", _osuMemoryReader.ReadBeatmapCreator(), StringComparison.OrdinalIgnoreCase)
+			.Replace("!version!", _osuMemoryReader.ReadBeatmapVersion(), StringComparison.OrdinalIgnoreCase)
+			.Replace("!sender!", e.Sender, StringComparison.OrdinalIgnoreCase)
+			.Replace("!link!", $"https://osu.ppy.sh/beatmaps/{_osuMemoryReader.ReadBeatmapId()}", StringComparison.OrdinalIgnoreCase);
+
+		_twitchClient.SendMessageAsync(response).GetAwaiter().GetResult();
 	}
 
 	private void OnTwitchClientDisconnected(object? sender, DisconnectedEventArgs e)
