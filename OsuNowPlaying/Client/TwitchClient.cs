@@ -66,6 +66,11 @@ public class TwitchClient
 		// send the "USER" command in the example, so we won't send it either.
 	}
 
+	public async Task SendMessageAsync(string message)
+	{
+		await _writer.WriteLineAsync($"PRIVMSG {_channel} :{message}");
+	}
+
 	public async Task DisconnectAsync(DisconnectReason reason = DisconnectReason.Normal)
 	{
 		_cancellationTokenSource?.Cancel();

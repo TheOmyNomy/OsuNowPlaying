@@ -1,4 +1,5 @@
-﻿using System.Windows;
+﻿using System;
+using System.Windows;
 using AsyncAwaitBestPractices;
 using OsuNowPlaying.Client;
 using OsuNowPlaying.Client.Events;
@@ -21,6 +22,7 @@ public partial class MainWindow
 		_twitchClient.Connected += OnTwitchClientConnected;
 		_twitchClient.Authenticated += OnTwitchClientAuthenticated;
 		_twitchClient.ChannelJoined += OnTwitchClientChannelJoined;
+		_twitchClient.MessageReceived += OnTwitchClientMessageReceived;
 		_twitchClient.Disconnected += OnTwitchClientDisconnected;
 
 		InitializeComponent();
@@ -55,6 +57,17 @@ public partial class MainWindow
 		// We can now allow the user to disconnect / logout.
 		LoginButton.Content = "Logout";
 		LoginButton.IsEnabled = true;
+	}
+
+	private void OnTwitchClientMessageReceived(object? sender, MessageReceivedEventArgs e)
+	{
+		string command = _configuration.GetValue<string>(ConfigurationSetting.Command);
+		string format = _configuration.GetValue<string>(ConfigurationSetting.Format);
+
+		if (!e.Message.StartsWith(command, StringComparison.OrdinalIgnoreCase))
+			return;
+
+		_twitchClient.SendMessageAsync(format).GetAwaiter().GetResult();
 	}
 
 	private void OnTwitchClientDisconnected(object? sender, DisconnectedEventArgs e)
