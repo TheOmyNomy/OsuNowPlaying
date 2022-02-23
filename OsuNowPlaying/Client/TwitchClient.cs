@@ -119,7 +119,7 @@ public class TwitchClient
 
 			Tags? tags = null;
 
-			if (_hasTagsCapabilities)
+			if (_hasTagsCapabilities && parts[0].StartsWith('@'))
 			{
 				tags = new Tags(parts[0]);
 				parts = parts[1..];
