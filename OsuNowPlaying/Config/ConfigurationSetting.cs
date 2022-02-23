@@ -3,5 +3,7 @@
 public enum ConfigurationSetting
 {
 	Username,
-	Token
+	Token,
+	Command,
+	Format
 }

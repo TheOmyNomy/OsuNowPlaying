@@ -21,6 +21,14 @@ public class Configuration
 			{
 				ConfigurationSetting.Token,
 				string.Empty
+			},
+			{
+				ConfigurationSetting.Command,
+				"!np"
+			},
+			{
+				ConfigurationSetting.Format,
+				"@!sender! !artist! - !title! (!creator!) [!version!] - !link!"
 			}
 		};
 
