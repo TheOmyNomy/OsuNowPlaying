@@ -32,8 +32,7 @@ public class StructuredOsuMemoryReader : OsuMemoryDataProvider.StructuredOsuMemo
 	}
 
 	// The ReadString(), ReadInt(), ReadClassProperty(), and ReadProperty()
-	// methods are based on the StructuredOsuMemoryProviderTester project
-	// from the ProcessMemoryDataFinder project (https://github.com/Piotrekol/ProcessMemoryDataFinder).
+	// methods are from the ProcessMemoryDataFinder project (https://github.com/Piotrekol/ProcessMemoryDataFinder).
 	// Thanks!
 
 	private string? ReadString(object obj, string propertyName)

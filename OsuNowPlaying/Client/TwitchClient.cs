@@ -26,6 +26,8 @@ public class TwitchClient
 
 	private CancellationTokenSource? _cancellationTokenSource;
 
+	private bool _hasTagsCapabilities;
+
 	private string _channel = null!;
 	private bool _hasJoinedChannel;
 
@@ -115,6 +117,14 @@ public class TwitchClient
 
 			string[] parts = line.Split();
 
+			Tags? tags = null;
+
+			if (_hasTagsCapabilities)
+			{
+				tags = new Tags(parts[0]);
+				parts = parts[1..];
+			}
+
 			string? prefix = null;
 
 			if (parts[0].StartsWith(':'))
@@ -131,6 +141,9 @@ public class TwitchClient
 				case "001":
 					await Process001CommandAsync();
 					break;
+				case "CAP":
+					await ProcessCapabilitiesCommandAsync(parameters);
+					break;
 				case "JOIN":
 					await ProcessJoinCommandAsync();
 					break;
@@ -141,7 +154,7 @@ public class TwitchClient
 					await ProcessPingCommandAsync(parameters);
 					break;
 				case "PRIVMSG":
-					await ProcessPrivateMessageCommandAsync(prefix, parameters);
+					await ProcessPrivateMessageCommandAsync(tags, prefix, parameters);
 					break;
 				case "002":
 				case "003":
@@ -166,6 +179,9 @@ public class TwitchClient
 	private async Task Process001CommandAsync()
 	{
 		Authenticated?.Invoke(this, new AuthenticatedEventArgs());
+
+		await _writer.WriteLineAsync("CAP REQ :twitch.tv/tags");
+
 		await _writer.WriteLineAsync($"JOIN {_channel}");
 
 		Task.Run(async () =>
@@ -183,6 +199,14 @@ public class TwitchClient
 
 			await DisconnectAsync(DisconnectReason.InvalidChannel);
 		}).SafeFireAndForget();
+	}
+
+	private Task ProcessCapabilitiesCommandAsync(string[] parameters)
+	{
+		if (parameters[1] == "ACK" && parameters[2] == ":twitch.tv/tags")
+			_hasTagsCapabilities = true;
+
+		return Task.CompletedTask;
 	}
 
 	private Task ProcessJoinCommandAsync()
@@ -209,12 +233,12 @@ public class TwitchClient
 		await _writer.WriteLineAsync($"PONG {parameters[0]}");
 	}
 
-	private Task ProcessPrivateMessageCommandAsync(string? prefix, string[] parameters)
+	private Task ProcessPrivateMessageCommandAsync(Tags? tags, string? prefix, string[] parameters)
 	{
 		if (string.IsNullOrWhiteSpace(prefix))
 			return Task.CompletedTask;
 
-		string sender = prefix.Split('!')[0][1..];
+		string sender = tags?.DisplayName ?? prefix.Split('!')[0][1..];
 
 		// string[] receivers = parameters[0].Split(',');
 		string message = string.Join(' ', parameters[1..])[1..];
