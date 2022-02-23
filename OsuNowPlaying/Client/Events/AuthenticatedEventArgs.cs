@@ -2,4 +2,4 @@
 
 namespace OsuNowPlaying.Client.Events;
 
-public class AuthenticationFailedEventArgs : EventArgs { }
+public class AuthenticatedEventArgs : EventArgs { }

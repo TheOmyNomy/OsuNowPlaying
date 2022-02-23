@@ -19,8 +19,7 @@ public partial class MainWindow
 		_twitchClient = new TwitchClient();
 
 		_twitchClient.Connected += OnTwitchClientConnected;
-		_twitchClient.AuthenticationSuccessful += OnTwitchClientAuthenticationSuccessful;
-		_twitchClient.AuthenticationFailed += OnTwitchClientAuthenticationFailed;
+		_twitchClient.Authenticated += OnTwitchClientAuthenticated;
 		_twitchClient.ChannelJoined += OnTwitchClientChannelJoined;
 		_twitchClient.Disconnected += OnTwitchClientDisconnected;
 
@@ -39,7 +38,7 @@ public partial class MainWindow
 		StatusTextBlock.Text = "Status: Authenticating...";
 	}
 
-	private void OnTwitchClientAuthenticationSuccessful(object? sender, AuthenticationSuccessfulEventArgs e)
+	private void OnTwitchClientAuthenticated(object? sender, AuthenticatedEventArgs e)
 	{
 		// We've successfully connected to the IRC server and authenticated
 		// with the specified username and token.
@@ -51,14 +50,6 @@ public partial class MainWindow
 		// We can now allow the user to disconnect / logout.
 		LoginButton.Content = "Logout";
 		LoginButton.IsEnabled = true;
-	}
-
-	private void OnTwitchClientAuthenticationFailed(object? sender, AuthenticationFailedEventArgs e)
-	{
-		// Although we successfully connected to the IRC server,
-		// the username and / or the token was incorrect.
-
-		// TODO: Display why authentication was unsuccessful.
 	}
 
 	private void OnTwitchClientChannelJoined(object? sender, ChannelJoinedEventArgs e)
@@ -87,7 +78,7 @@ public partial class MainWindow
 	{
 		if (LoginButton.Content as string == "Logout")
 		{
-			_twitchClient.Disconnect();
+			_twitchClient.DisconnectAsync().GetAwaiter().GetResult();
 			return;
 		}
 
@@ -118,7 +109,7 @@ public partial class MainWindow
 
 	private void OnExitButtonClick(object sender, RoutedEventArgs e)
 	{
-		_twitchClient.Disconnect();
+		_twitchClient.DisconnectAsync().GetAwaiter().GetResult();
 		Application.Current.Shutdown();
 	}
 }

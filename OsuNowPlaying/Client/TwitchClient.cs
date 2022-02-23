@@ -15,8 +15,7 @@ public class TwitchClient
 	private const int Port = 6667;
 
 	public event EventHandler<ConnectedEventArgs>? Connected;
-	public event EventHandler<AuthenticationSuccessfulEventArgs>? AuthenticationSuccessful;
-	public event EventHandler<AuthenticationFailedEventArgs>? AuthenticationFailed;
+	public event EventHandler<AuthenticatedEventArgs>? Authenticated;
 	public event EventHandler<ChannelJoinedEventArgs>? ChannelJoined;
 	public event EventHandler<DisconnectedEventArgs>? Disconnected;
 
@@ -25,11 +24,11 @@ public class TwitchClient
 	private StreamWriter _writer = null!;
 
 	private CancellationTokenSource? _cancellationTokenSource;
+
+	private string _channel = null!;
 	private bool _hasJoinedChannel;
 
 	public bool IsConnected => (_client?.Connected ?? false) && (!_cancellationTokenSource?.IsCancellationRequested ?? false);
-
-	private string _channel = null!;
 
 	public async Task ConnectAsync(string username, string token)
 	{
@@ -56,7 +55,7 @@ public class TwitchClient
 		ListenerAsync().SafeFireAndForget(exception =>
 		{
 			Logger.Error(exception);
-			Disconnected?.Invoke(this, new DisconnectedEventArgs());
+			Disconnected?.Invoke(this, new DisconnectedEventArgs(DisconnectReason.ConnectionAborted));
 		});
 
 		await _writer.WriteLineAsync($"PASS {token}");
@@ -66,9 +65,23 @@ public class TwitchClient
 		// send the "USER" command in the example, so we won't send it either.
 	}
 
-	public void Disconnect()
+	public async Task DisconnectAsync(DisconnectReason reason = DisconnectReason.Normal)
 	{
 		_cancellationTokenSource?.Cancel();
+
+		if (_client?.Connected ?? false)
+		{
+			if (_hasJoinedChannel)
+			{
+				await _writer.WriteLineAsync($"PART {_channel}");
+				_hasJoinedChannel = false;
+			}
+
+			await _writer.WriteLineAsync("QUIT");
+			_client.Close();
+		}
+
+		Disconnected?.Invoke(this, new DisconnectedEventArgs(reason));
 	}
 
 	private async Task ListenerAsync()
@@ -137,18 +150,13 @@ public class TwitchClient
 			}
 		}
 
-		if (_client!.Connected)
-		{
-			await _writer.WriteLineAsync("QUIT");
-			_client.Close();
-		}
-
-		Disconnected?.Invoke(this, new DisconnectedEventArgs());
+		if (!_cancellationTokenSource!.IsCancellationRequested)
+			await DisconnectAsync();
 	}
 
 	private async Task Process001CommandAsync()
 	{
-		AuthenticationSuccessful?.Invoke(this, new AuthenticationSuccessfulEventArgs());
+		Authenticated?.Invoke(this, new AuthenticatedEventArgs());
 		await _writer.WriteLineAsync($"JOIN {_channel}");
 
 		Task.Run(async () =>
@@ -164,7 +172,7 @@ public class TwitchClient
 				await Task.Delay(250);
 			}
 
-			Disconnect();
+			await DisconnectAsync(DisconnectReason.InvalidChannel);
 		}).SafeFireAndForget();
 	}
 
@@ -176,18 +184,15 @@ public class TwitchClient
 		return Task.CompletedTask;
 	}
 
-	private Task ProcessNoticeCommandAsync(string[] parameters)
+	private async Task ProcessNoticeCommandAsync(string[] parameters)
 	{
 		// string[] receivers = parameters[0].Split(',');
 		string message = string.Join(' ', parameters[1..])[1..];
 
 		if (message == "Improperly formatted auth")
 		{
-			AuthenticationFailed?.Invoke(this, new AuthenticationFailedEventArgs());
-			Disconnect();
+			await DisconnectAsync(DisconnectReason.InvalidAuthenticationToken);
 		}
-
-		return Task.CompletedTask;
 	}
 
 	private async Task ProcessPingCommandAsync(string[] parameters)
