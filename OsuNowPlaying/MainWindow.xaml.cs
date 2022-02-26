@@ -15,6 +15,8 @@ public partial class MainWindow
 	private readonly StructuredOsuMemoryReader _osuMemoryReader;
 	private readonly TwitchClient _twitchClient;
 
+	private AboutWindow? _aboutWindow;
+
 	public MainWindow(Configuration configuration)
 	{
 		_configuration = configuration;
@@ -79,6 +81,24 @@ public partial class MainWindow
 	{
 		// TODO: Display why we were disconnected if it wasn't a normal disconnection.
 		Dispatcher.Invoke(() => SetState(ConnectionState.Offline));
+	}
+
+	private void OnAboutButtonClick(object sender, RoutedEventArgs e)
+	{
+		if (_aboutWindow == null)
+		{
+			_aboutWindow = new AboutWindow
+			{
+				Owner = this
+			};
+
+			_aboutWindow.Closing += (_, _) => _aboutWindow = null;
+		}
+
+		if (_aboutWindow.IsVisible)
+			_aboutWindow.Focus();
+		else
+			_aboutWindow.Show();
 	}
 
 	private void OnLoginButtonClick(object sender, RoutedEventArgs e)

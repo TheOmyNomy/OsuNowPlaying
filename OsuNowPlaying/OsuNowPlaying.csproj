@@ -15,4 +15,8 @@
 		<PackageReference Include="OsuMemoryDataProvider" Version="0.8.6" />
 	</ItemGroup>
 
+	<ItemGroup>
+		<Resource Include="icon.ico" />
+	</ItemGroup>
+
 </Project>
