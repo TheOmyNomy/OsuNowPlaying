@@ -39,7 +39,9 @@
                 <TextBlock Grid.Column="1" Grid.Row="1" Margin="0,0,0,10"
                            Text="A now playing chat bot for osu! streamers!" />
 
-                <TextBlock Grid.Column="1" Grid.Row="2" Margin="0,0,0,10" Text="Version: Unknown" />
+                <TextBlock Grid.Column="1" Grid.Row="2" Margin="0,0,0,10" Name="VersionTextBlock"
+                           Text="Version: Unknown" />
+
                 <TextBlock Grid.Column="1" Grid.Row="3" Text="Copyright (c) TheOmyNomy 2018 - 2022" />
             </Grid>
         </GroupBox>
