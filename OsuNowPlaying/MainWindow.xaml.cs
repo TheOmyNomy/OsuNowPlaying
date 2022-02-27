@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Diagnostics;
 using System.Windows;
+using System.Windows.Navigation;
 using AsyncAwaitBestPractices;
 using OsuNowPlaying.Client;
 using OsuNowPlaying.Client.Events;
@@ -99,6 +101,11 @@ public partial class MainWindow
 			_aboutWindow.Focus();
 		else
 			_aboutWindow.Show();
+	}
+
+	private void OnHyperlinkRequestNavigate(object sender, RequestNavigateEventArgs e)
+	{
+		Process.Start("explorer.exe", e.Uri.AbsoluteUri);
 	}
 
 	private void OnLoginButtonClick(object sender, RoutedEventArgs e)
