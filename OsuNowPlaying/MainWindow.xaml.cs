@@ -61,12 +61,20 @@ public partial class MainWindow
 	private void OnTwitchClientMessageReceived(object? sender, MessageReceivedEventArgs e)
 	{
 		string command = _configuration.GetValue<string>(ConfigurationSetting.Command);
-		string format = _configuration.GetValue<string>(ConfigurationSetting.Format);
-
 		string firstPart = e.Message.Split()[0].Trim();
 
 		if (!firstPart.Equals(command, StringComparison.OrdinalIgnoreCase))
 			return;
+
+		if (!_osuMemoryReader.CanRead || !_osuMemoryReader.TryRead(_osuMemoryReader.OsuMemoryAddresses.GeneralData))
+		{
+			string username = _configuration.GetValue<string>(ConfigurationSetting.Username);
+			_twitchClient.SendMessageAsync($"@{username} osu! isn't running!").GetAwaiter().GetResult();
+
+			return;
+		}
+
+		string format = _configuration.GetValue<string>(ConfigurationSetting.Format);
 
 		string response = format
 			.Replace("!artist!", _osuMemoryReader.ReadBeatmapArtist(), StringComparison.OrdinalIgnoreCase)
