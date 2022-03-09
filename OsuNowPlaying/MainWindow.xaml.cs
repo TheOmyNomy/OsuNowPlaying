@@ -6,7 +6,7 @@ using AsyncAwaitBestPractices;
 using OsuNowPlaying.Client;
 using OsuNowPlaying.Client.Events;
 using OsuNowPlaying.Config;
-using OsuNowPlaying.Utilities;
+using OsuNowPlaying.Logging;
 
 namespace OsuNowPlaying;
 

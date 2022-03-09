@@ -5,7 +5,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using AsyncAwaitBestPractices;
 using OsuNowPlaying.Client.Events;
-using OsuNowPlaying.Utilities;
+using OsuNowPlaying.Logging;
 
 namespace OsuNowPlaying.Client;
 

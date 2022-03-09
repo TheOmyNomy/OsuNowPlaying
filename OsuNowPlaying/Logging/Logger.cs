@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace OsuNowPlaying.Utilities;
+namespace OsuNowPlaying.Logging;
 
 public class Logger
 {

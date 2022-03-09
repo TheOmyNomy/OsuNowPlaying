@@ -1,4 +1,4 @@
-﻿namespace OsuNowPlaying.Utilities;
+﻿namespace OsuNowPlaying.Logging;
 
 public enum LogLevel
 {
