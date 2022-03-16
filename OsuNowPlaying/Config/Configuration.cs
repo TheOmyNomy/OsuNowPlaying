@@ -28,7 +28,7 @@ public class Configuration
 			},
 			{
 				ConfigurationSetting.Format,
-				"@!sender! !artist! - !title! (!creator!) [!version!] - !link!"
+				"@!sender! !artist! - !title! (!creator!) [!version!] - https://osu.ppy.sh/beatmaps/!id!"
 			}
 		};
 

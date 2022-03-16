@@ -82,7 +82,8 @@ public partial class MainWindow
 			.Replace("!creator!", _osuMemoryReader.ReadBeatmapCreator(), StringComparison.OrdinalIgnoreCase)
 			.Replace("!version!", _osuMemoryReader.ReadBeatmapVersion(), StringComparison.OrdinalIgnoreCase)
 			.Replace("!sender!", e.Sender, StringComparison.OrdinalIgnoreCase)
-			.Replace("!link!", $"https://osu.ppy.sh/beatmaps/{_osuMemoryReader.ReadBeatmapId()}", StringComparison.OrdinalIgnoreCase);
+			.Replace("!id!", "" + _osuMemoryReader.ReadBeatmapId(), StringComparison.OrdinalIgnoreCase)
+			.Replace("!set-id!", "" + _osuMemoryReader.ReadBeatmapSetId(), StringComparison.OrdinalIgnoreCase);
 
 		_twitchClient.SendMessageAsync(response).GetAwaiter().GetResult();
 	}

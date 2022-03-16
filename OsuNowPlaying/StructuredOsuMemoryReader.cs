@@ -31,6 +31,11 @@ public class StructuredOsuMemoryReader : OsuMemoryDataProvider.StructuredOsuMemo
 		return ReadInt(_currentBeatmap, nameof(CurrentBeatmap.Id));
 	}
 
+	public int ReadBeatmapSetId()
+	{
+		return ReadInt(_currentBeatmap, nameof(CurrentBeatmap.SetId));
+	}
+
 	// The ReadString(), ReadInt(), ReadClassProperty(), and ReadProperty()
 	// methods are from the ProcessMemoryDataFinder project (https://github.com/Piotrekol/ProcessMemoryDataFinder).
 	// Thanks!
