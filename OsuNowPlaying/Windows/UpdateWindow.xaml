@@ -35,12 +35,14 @@
 				<TextBlock Grid.Column="0" Grid.Row="0" Grid.ColumnSpan="2" TextAlignment="Center" Margin="0,0,0,5"
 				           Text="A new update is available!" />
 
-				<TextBlock Grid.Column="0" Grid.Row="1" Grid.ColumnSpan="2" TextAlignment="Center" Text="Current: Unknown" />
+				<TextBlock Grid.Column="0" Grid.Row="1" Grid.ColumnSpan="2" TextAlignment="Center" Name="CurrentVersionTextBlock"
+				           Text="Current: Unknown" />
 				<TextBlock Grid.Column="0" Grid.Row="2" Grid.ColumnSpan="2" TextAlignment="Center" Margin="0,0,0,5"
-				           Text="Latest: Unknown" />
+				           Name="LatestVersionTextBlock" Text="Latest: Unknown" />
 
-				<Button Grid.Column="0" Grid.Row="3" Width="75" Content="Update" />
-				<Button Grid.Column="1" Grid.Row="3" Width="75" Margin="5,0,0,0" Content="Cancel" />
+				<Button Grid.Column="0" Grid.Row="3" Width="75" Name="UpdateButton" Content="Update" Click="OnUpdateButtonClick" />
+				<Button Grid.Column="1" Grid.Row="3" Width="75" Margin="5,0,0,0" Name="CancelButton" Content="Cancel"
+				        Click="OnCancelButtonClick" />
 			</Grid>
 		</GroupBox>
 	</Grid>

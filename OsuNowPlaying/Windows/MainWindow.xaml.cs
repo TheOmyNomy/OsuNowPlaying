@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Diagnostics;
+using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Navigation;
 using AsyncAwaitBestPractices;
@@ -7,6 +8,7 @@ using OsuNowPlaying.Client;
 using OsuNowPlaying.Client.Events;
 using OsuNowPlaying.Config;
 using OsuNowPlaying.Logging;
+using OsuNowPlaying.Updater;
 
 namespace OsuNowPlaying.Windows;
 
@@ -40,6 +42,30 @@ public partial class MainWindow
 	{
 		UsernameTextBox.Text = _configuration.GetValue<string>(ConfigurationSetting.Username);
 		TokenTextBox.Password = _configuration.GetValue<string>(ConfigurationSetting.Token);
+
+		Task.Run(async () =>
+		{
+			UpdateManager.Clean();
+
+			bool result = await UpdateManager.CheckAsync();
+			Logger.Debug($"Current: {UpdateManager.CurrentVersion}, Latest: {UpdateManager.LatestVersion}");
+
+			if (!result)
+			{
+				Logger.Debug("No updates are available!");
+				return;
+			}
+
+			Logger.Debug("An update is available!");
+
+			Dispatcher.Invoke(() =>
+			{
+				new UpdateWindow
+				{
+					Owner = this
+				}.Show();
+			});
+		});
 	}
 
 	private void OnTwitchClientConnected(object? sender, ConnectedEventArgs e)
