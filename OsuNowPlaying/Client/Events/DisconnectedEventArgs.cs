@@ -17,5 +17,6 @@ public enum DisconnectReason
 	Normal,
 	ConnectionAborted,
 	InvalidAuthenticationToken,
-	InvalidChannel
+	InvalidChannel,
+	LoginAuthenticationFailed
 }

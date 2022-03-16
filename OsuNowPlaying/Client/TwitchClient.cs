@@ -223,9 +223,9 @@ public class TwitchClient
 		string message = string.Join(' ', parameters[1..])[1..];
 
 		if (message == "Improperly formatted auth")
-		{
 			await DisconnectAsync(DisconnectReason.InvalidAuthenticationToken);
-		}
+		else if (message == "Login authentication failed")
+			await DisconnectAsync(DisconnectReason.LoginAuthenticationFailed);
 	}
 
 	private async Task ProcessPingCommandAsync(string[] parameters)
