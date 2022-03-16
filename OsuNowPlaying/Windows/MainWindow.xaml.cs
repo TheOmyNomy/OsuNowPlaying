@@ -8,7 +8,7 @@ using OsuNowPlaying.Client.Events;
 using OsuNowPlaying.Config;
 using OsuNowPlaying.Logging;
 
-namespace OsuNowPlaying;
+namespace OsuNowPlaying.Windows;
 
 public partial class MainWindow
 {

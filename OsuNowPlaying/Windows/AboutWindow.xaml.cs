@@ -1,6 +1,6 @@
 ﻿using OsuNowPlaying.Utilities;
 
-namespace OsuNowPlaying;
+namespace OsuNowPlaying.Windows;
 
 public partial class AboutWindow
 {

@@ -3,6 +3,7 @@ using System.Runtime.InteropServices;
 using System.Windows;
 using Microsoft.Extensions.DependencyInjection;
 using OsuNowPlaying.Config;
+using OsuNowPlaying.Windows;
 
 namespace OsuNowPlaying;
 
