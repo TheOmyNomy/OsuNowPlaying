@@ -22,8 +22,6 @@ public partial class UpdateWindow
 
 	private void OnUpdateButtonClick(object sender, RoutedEventArgs e)
 	{
-		MessageBox.Show(Width + " " + Height);
-
 		UpdateButton.IsEnabled = false;
 		CancelButton.IsEnabled = false;
 		CloseButton.IsEnabled = false;
