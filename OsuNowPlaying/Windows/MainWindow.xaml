@@ -45,7 +45,8 @@
 				<TextBox Grid.Column="1" Grid.Row="0" Width="175" Margin="5,0,0,5" Name="UsernameTextBox" />
 
 				<TextBlock Grid.Column="0" Grid.Row="1" TextAlignment="Right" xml:space="preserve">Token <Hyperlink
-					NavigateUri="https://twitchapps.com/tmi/" RequestNavigate="OnHyperlinkRequestNavigate">(?)</Hyperlink></TextBlock>
+					NavigateUri="https://twitchapps.com/tmi/" RequestNavigate="OnHyperlinkRequestNavigate"
+					KeyboardNavigation.TabIndex="4">(?)</Hyperlink></TextBlock>
 
 				<PasswordBox Grid.Column="1" Grid.Row="1" Width="175" Margin="5,0,0,5" Name="TokenTextBox"
 				             PasswordChar="*" />
