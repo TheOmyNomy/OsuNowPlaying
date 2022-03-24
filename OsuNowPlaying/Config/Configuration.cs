@@ -73,7 +73,7 @@ public class Configuration
 		using StreamWriter writer = new StreamWriter(stream);
 
 		foreach (var setting in _settings)
-			writer.WriteLine($"{setting.Key} = {setting.Value}");
+			writer.WriteLine($"{setting.Key} = {setting.Value.Value}");
 
 		writer.Flush();
 	}
