@@ -8,39 +8,41 @@ public class Configuration
 {
 	private const string Path = "settings.ini";
 
-	private readonly Dictionary<ConfigurationSetting, object> _settings;
+	private readonly Dictionary<ConfigurationSetting, ConfigurationObject> _settings;
 
 	public Configuration()
 	{
-		_settings = new Dictionary<ConfigurationSetting, object>
+		_settings = new Dictionary<ConfigurationSetting, ConfigurationObject>
 		{
 			{
 				ConfigurationSetting.Username,
-				string.Empty
+				new ConfigurationObject(string.Empty)
 			},
 			{
 				ConfigurationSetting.Token,
-				string.Empty
+				new ConfigurationObject(string.Empty)
 			},
 			{
 				ConfigurationSetting.Channel,
-				string.Empty
+				new ConfigurationObject(string.Empty)
 			},
 			{
 				ConfigurationSetting.Command,
-				"!np"
+				new ConfigurationObject("!np")
 			},
 			{
 				ConfigurationSetting.Format,
-				"@!sender! !artist! - !title! (!creator!) [!version!] - https://osu.ppy.sh/beatmaps/!id!"
+				new ConfigurationObject("@!sender! !artist! - !title! (!creator!) [!version!] - https://osu.ppy.sh/beatmaps/!id!")
 			}
 		};
 
 		Load();
 	}
 
-	public T GetValue<T>(ConfigurationSetting setting) => (T) _settings[setting];
-	public void SetValue(ConfigurationSetting setting, object value) => _settings[setting] = value;
+	public T GetDefaultValue<T>(ConfigurationSetting setting) => (T) _settings[setting].DefaultValue;
+	public T GetValue<T>(ConfigurationSetting setting) => (T) _settings[setting].Value;
+
+	public void SetValue(ConfigurationSetting setting, object value) => _settings[setting].Value = value;
 
 	public void Load()
 	{
@@ -61,7 +63,7 @@ public class Configuration
 			string key = tokens[0].Trim(), value = string.Join(' ', tokens[1..]).Trim();
 
 			if (Enum.TryParse(key, out ConfigurationSetting setting))
-				_settings[setting] = value;
+				_settings[setting].Value = value;
 		}
 	}
 
@@ -74,5 +76,18 @@ public class Configuration
 			writer.WriteLine($"{setting.Key} = {setting.Value}");
 
 		writer.Flush();
+	}
+
+	private class ConfigurationObject
+	{
+		public object Value { get; set; }
+
+		public readonly object DefaultValue;
+
+		public ConfigurationObject(object defaultValue)
+		{
+			DefaultValue = defaultValue;
+			Value = defaultValue;
+		}
 	}
 }
