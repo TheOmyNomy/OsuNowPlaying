@@ -98,10 +98,10 @@
 						<TextBox Grid.Column="1" Grid.Row="0" Width="225" Margin="5,0,0,5" Name="ChannelTextBox" />
 
 						<TextBlock Grid.Column="0" Grid.Row="1" TextAlignment="Right" Text="Command" />
-						<TextBox Grid.Column="1" Grid.Row="1" Width="225" Margin="5,0,0,5" Name="CommandTextBox" IsEnabled="False" />
+						<TextBox Grid.Column="1" Grid.Row="1" Width="225" Margin="5,0,0,5" Name="CommandTextBox" />
 
 						<TextBlock Grid.Column="0" Grid.Row="2" TextAlignment="Right" Text="Format" />
-						<TextBox Grid.Column="1" Grid.Row="2" Width="225" Margin="5,0,0,0" Name="FormatTextBox" IsEnabled="False" />
+						<TextBox Grid.Column="1" Grid.Row="2" Width="225" Margin="5,0,0,0" Name="FormatTextBox" />
 					</Grid>
 				</GroupBox>
 			</Grid>

@@ -43,9 +43,21 @@ public partial class MainWindow
 	{
 		SizeToContent = SizeToContent.WidthAndHeight;
 
+		string defaultCommand = _configuration.GetDefaultValue<string>(ConfigurationSetting.Command);
+		AdonisUI.Extensions.WatermarkExtension.SetWatermark(CommandTextBox, defaultCommand);
+
+		string defaultFormat = _configuration.GetDefaultValue<string>(ConfigurationSetting.Format);
+		AdonisUI.Extensions.WatermarkExtension.SetWatermark(FormatTextBox, defaultFormat);
+
 		UsernameTextBox.Text = _configuration.GetValue<string>(ConfigurationSetting.Username);
 		TokenTextBox.Password = _configuration.GetValue<string>(ConfigurationSetting.Token);
 		ChannelTextBox.Text = _configuration.GetValue<string>(ConfigurationSetting.Channel);
+
+		if (!_configuration.IsDefaultValue(ConfigurationSetting.Command))
+			CommandTextBox.Text = _configuration.GetValue<string>(ConfigurationSetting.Command);
+
+		if (!_configuration.IsDefaultValue(ConfigurationSetting.Format))
+			FormatTextBox.Text = _configuration.GetValue<string>(ConfigurationSetting.Format);
 
 		Task.Run(async () =>
 		{
@@ -91,6 +103,10 @@ public partial class MainWindow
 	private void OnTwitchClientMessageReceived(object? sender, MessageReceivedEventArgs e)
 	{
 		string command = _configuration.GetValue<string>(ConfigurationSetting.Command);
+
+		if (string.IsNullOrWhiteSpace(command))
+			command = _configuration.GetDefaultValue<string>(ConfigurationSetting.Command);
+
 		string firstPart = e.Message.Split()[0].Trim();
 
 		if (!firstPart.Equals(command, StringComparison.OrdinalIgnoreCase))
@@ -109,6 +125,9 @@ public partial class MainWindow
 		}
 
 		string format = _configuration.GetValue<string>(ConfigurationSetting.Format);
+
+		if (string.IsNullOrWhiteSpace(format))
+			format = _configuration.GetDefaultValue<string>(ConfigurationSetting.Format);
 
 		string response = format
 			.Replace("!artist!", _osuMemoryReader.ReadBeatmapArtist(), StringComparison.OrdinalIgnoreCase)
@@ -181,6 +200,8 @@ public partial class MainWindow
 		_configuration.SetValue(ConfigurationSetting.Username, username);
 		_configuration.SetValue(ConfigurationSetting.Token, token);
 		_configuration.SetValue(ConfigurationSetting.Channel, channel);
+		_configuration.SetValue(ConfigurationSetting.Command, CommandTextBox.Text);
+		_configuration.SetValue(ConfigurationSetting.Format, FormatTextBox.Text);
 
 		_twitchClient.ConnectAsync(username, token, channel).SafeFireAndForget(exception =>
 		{
@@ -209,6 +230,8 @@ public partial class MainWindow
 				UsernameTextBox.IsEnabled = false;
 				TokenTextBox.IsEnabled = false;
 				ChannelTextBox.IsEnabled = false;
+				CommandTextBox.IsEnabled = false;
+				FormatTextBox.IsEnabled = false;
 
 				LoginButton.IsEnabled = false;
 
@@ -230,6 +253,8 @@ public partial class MainWindow
 				UsernameTextBox.IsEnabled = true;
 				TokenTextBox.IsEnabled = true;
 				ChannelTextBox.IsEnabled = true;
+				CommandTextBox.IsEnabled = true;
+				FormatTextBox.IsEnabled = true;
 
 				LoginButton.Content = "Login";
 				LoginButton.IsEnabled = true;
