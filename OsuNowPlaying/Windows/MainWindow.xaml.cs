@@ -2,6 +2,7 @@
 using System.Diagnostics;
 using System.Threading.Tasks;
 using System.Windows;
+using System.Windows.Controls;
 using System.Windows.Navigation;
 using AsyncAwaitBestPractices;
 using OsuNowPlaying.Client;
@@ -40,6 +41,8 @@ public partial class MainWindow
 
 	private void OnLoaded(object sender, RoutedEventArgs e)
 	{
+		SizeToContent = SizeToContent.WidthAndHeight;
+
 		UsernameTextBox.Text = _configuration.GetValue<string>(ConfigurationSetting.Username);
 		TokenTextBox.Password = _configuration.GetValue<string>(ConfigurationSetting.Token);
 
@@ -178,6 +181,12 @@ public partial class MainWindow
 	{
 		_twitchClient.DisconnectAsync().GetAwaiter().GetResult();
 		Application.Current.Shutdown();
+	}
+
+	private void OnAdvancedCheckBoxChecked(object sender, RoutedEventArgs e)
+	{
+		if (sender is CheckBox checkBox)
+			AdvancedGroupBox.Visibility = checkBox.IsChecked.GetValueOrDefault() ? Visibility.Visible : Visibility.Collapsed;
 	}
 
 	private void SetState(ConnectionState state)
