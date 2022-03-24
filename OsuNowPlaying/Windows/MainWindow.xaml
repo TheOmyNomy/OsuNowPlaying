@@ -43,7 +43,8 @@
 				</Grid.RowDefinitions>
 
 				<TextBlock Grid.Column="0" Grid.Row="0" TextAlignment="Right" Text="Username" />
-				<TextBox Grid.Column="1" Grid.Row="0" Width="175" Margin="5,0,0,5" Name="UsernameTextBox" />
+				<TextBox Grid.Column="1" Grid.Row="0" Width="175" Margin="5,0,0,5" Name="UsernameTextBox"
+				         TextChanged="OnUsernameTextBoxTextChanged" />
 
 				<TextBlock Grid.Column="0" Grid.Row="1" TextAlignment="Right" xml:space="preserve">Token <Hyperlink
 					NavigateUri="https://twitchapps.com/tmi/" RequestNavigate="OnHyperlinkRequestNavigate"
@@ -94,7 +95,7 @@
 						</Grid.RowDefinitions>
 
 						<TextBlock Grid.Column="0" Grid.Row="0" TextAlignment="Right" Text="Channel" />
-						<TextBox Grid.Column="1" Grid.Row="0" Width="175" Margin="5,0,0,5" Name="ChannelTextBox" IsEnabled="False" />
+						<TextBox Grid.Column="1" Grid.Row="0" Width="175" Margin="5,0,0,5" Name="ChannelTextBox" />
 
 						<TextBlock Grid.Column="0" Grid.Row="1" TextAlignment="Right" Text="Command" />
 						<TextBox Grid.Column="1" Grid.Row="1" Width="175" Margin="5,0,0,5" Name="CommandTextBox" IsEnabled="False" />

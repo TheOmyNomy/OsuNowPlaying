@@ -23,6 +23,10 @@ public class Configuration
 				string.Empty
 			},
 			{
+				ConfigurationSetting.Channel,
+				string.Empty
+			},
+			{
 				ConfigurationSetting.Command,
 				"!np"
 			},

@@ -45,6 +45,7 @@ public partial class MainWindow
 
 		UsernameTextBox.Text = _configuration.GetValue<string>(ConfigurationSetting.Username);
 		TokenTextBox.Password = _configuration.GetValue<string>(ConfigurationSetting.Token);
+		ChannelTextBox.Text = _configuration.GetValue<string>(ConfigurationSetting.Channel);
 
 		Task.Run(async () =>
 		{
@@ -97,8 +98,12 @@ public partial class MainWindow
 
 		if (!_osuMemoryReader.CanRead || !_osuMemoryReader.TryRead(_osuMemoryReader.OsuMemoryAddresses.GeneralData))
 		{
-			string username = _configuration.GetValue<string>(ConfigurationSetting.Username);
-			_twitchClient.SendMessageAsync($"@{username} osu! isn't running!").GetAwaiter().GetResult();
+			string channel = _configuration.GetValue<string>(ConfigurationSetting.Channel);
+
+			if (string.IsNullOrWhiteSpace(channel))
+				channel = _configuration.GetValue<string>(ConfigurationSetting.Username);
+
+			_twitchClient.SendMessageAsync($"@{channel} osu! isn't running!").GetAwaiter().GetResult();
 
 			return;
 		}
@@ -146,6 +151,11 @@ public partial class MainWindow
 		Process.Start("explorer.exe", e.Uri.AbsoluteUri);
 	}
 
+	private void OnUsernameTextBoxTextChanged(object sender, TextChangedEventArgs e)
+	{
+		AdonisUI.Extensions.WatermarkExtension.SetWatermark(ChannelTextBox, UsernameTextBox.Text);
+	}
+
 	private void OnLoginButtonClick(object sender, RoutedEventArgs e)
 	{
 		if (LoginButton.Content as string == "Logout")
@@ -158,6 +168,7 @@ public partial class MainWindow
 
 		string username = UsernameTextBox.Text;
 		string token = TokenTextBox.Password;
+		string channel = ChannelTextBox.Text;
 
 		// TODO: Implement proper validation.
 		// TODO: Add UI feedback for validation.
@@ -169,8 +180,9 @@ public partial class MainWindow
 
 		_configuration.SetValue(ConfigurationSetting.Username, username);
 		_configuration.SetValue(ConfigurationSetting.Token, token);
+		_configuration.SetValue(ConfigurationSetting.Channel, channel);
 
-		_twitchClient.ConnectAsync(username, token).SafeFireAndForget(exception =>
+		_twitchClient.ConnectAsync(username, token, channel).SafeFireAndForget(exception =>
 		{
 			Logger.Error(exception);
 			SetState(ConnectionState.Offline);
@@ -196,6 +208,8 @@ public partial class MainWindow
 			case ConnectionState.Connecting:
 				UsernameTextBox.IsEnabled = false;
 				TokenTextBox.IsEnabled = false;
+				ChannelTextBox.IsEnabled = false;
+
 				LoginButton.IsEnabled = false;
 
 				StatusTextBlock.Text = "Status: Connecting...";
@@ -215,6 +229,7 @@ public partial class MainWindow
 			default:
 				UsernameTextBox.IsEnabled = true;
 				TokenTextBox.IsEnabled = true;
+				ChannelTextBox.IsEnabled = true;
 
 				LoginButton.Content = "Login";
 				LoginButton.IsEnabled = true;

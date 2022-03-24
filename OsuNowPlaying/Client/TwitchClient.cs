@@ -33,7 +33,7 @@ public class TwitchClient
 
 	public bool IsConnected => (_client?.Connected ?? false) && (!_cancellationTokenSource?.IsCancellationRequested ?? false);
 
-	public async Task ConnectAsync(string username, string token)
+	public async Task ConnectAsync(string username, string token, string? channel = null)
 	{
 		if (IsConnected)
 			return;
@@ -53,7 +53,10 @@ public class TwitchClient
 			AutoFlush = true
 		};
 
-		_channel = (username.StartsWith('#') ? username : '#' + username).ToLower();
+		if (string.IsNullOrWhiteSpace(channel))
+			channel = username;
+
+		_channel = (channel.StartsWith('#') ? channel : '#' + channel).ToLower();
 
 		ListenerAsync().SafeFireAndForget(exception =>
 		{

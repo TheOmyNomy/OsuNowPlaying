@@ -4,6 +4,7 @@ public enum ConfigurationSetting
 {
 	Username,
 	Token,
+	Channel,
 	Command,
 	Format
 }
