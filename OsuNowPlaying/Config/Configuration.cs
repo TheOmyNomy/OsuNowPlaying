@@ -44,6 +44,8 @@ public class Configuration
 
 	public void SetValue(ConfigurationSetting setting, object value) => _settings[setting].Value = value;
 
+	public bool IsDefaultValue(ConfigurationSetting setting) => _settings[setting].DefaultValue.Equals(_settings[setting].Value);
+
 	public void Load()
 	{
 		if (!File.Exists(Path))
