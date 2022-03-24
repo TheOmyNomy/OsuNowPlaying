@@ -67,7 +67,7 @@ public class Configuration
 
 	public void Save()
 	{
-		using FileStream stream = File.OpenWrite(Path);
+		using FileStream stream = File.Open(Path, FileMode.Create);
 		using StreamWriter writer = new StreamWriter(stream);
 
 		foreach (var setting in _settings)
