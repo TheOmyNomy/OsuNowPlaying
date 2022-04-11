@@ -43,14 +43,11 @@ public partial class MainWindow
 	{
 		SizeToContent = SizeToContent.WidthAndHeight;
 
-		string defaultCommand = _configuration.GetDefaultValue<string>(ConfigurationSetting.Command);
-		AdonisUI.Extensions.WatermarkExtension.SetWatermark(CommandTextBox, defaultCommand);
-
-		string defaultFormat = _configuration.GetDefaultValue<string>(ConfigurationSetting.Format);
-		AdonisUI.Extensions.WatermarkExtension.SetWatermark(FormatTextBox, defaultFormat);
-
 		UsernameTextBox.Text = _configuration.GetValue<string>(ConfigurationSetting.Username);
 		TokenTextBox.Password = _configuration.GetValue<string>(ConfigurationSetting.Token);
+
+		AdvancedCheckBox.IsChecked = _configuration.GetValue<bool>(ConfigurationSetting.Advanced);
+
 		ChannelTextBox.Text = _configuration.GetValue<string>(ConfigurationSetting.Channel);
 
 		if (!_configuration.IsDefaultValue(ConfigurationSetting.Command))
@@ -58,6 +55,12 @@ public partial class MainWindow
 
 		if (!_configuration.IsDefaultValue(ConfigurationSetting.Format))
 			FormatTextBox.Text = _configuration.GetValue<string>(ConfigurationSetting.Format);
+
+		string defaultCommand = _configuration.GetDefaultValue<string>(ConfigurationSetting.Command);
+		AdonisUI.Extensions.WatermarkExtension.SetWatermark(CommandTextBox, defaultCommand);
+
+		string defaultFormat = _configuration.GetDefaultValue<string>(ConfigurationSetting.Format);
+		AdonisUI.Extensions.WatermarkExtension.SetWatermark(FormatTextBox, defaultFormat);
 
 		Task.Run(async () =>
 		{
@@ -199,6 +202,7 @@ public partial class MainWindow
 
 		_configuration.SetValue(ConfigurationSetting.Username, username);
 		_configuration.SetValue(ConfigurationSetting.Token, token);
+		_configuration.SetValue(ConfigurationSetting.Advanced, AdvancedCheckBox.IsChecked.GetValueOrDefault());
 		_configuration.SetValue(ConfigurationSetting.Channel, channel);
 		_configuration.SetValue(ConfigurationSetting.Command, CommandTextBox.Text);
 		_configuration.SetValue(ConfigurationSetting.Format, FormatTextBox.Text);
