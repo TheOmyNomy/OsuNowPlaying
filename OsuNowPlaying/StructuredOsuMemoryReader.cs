@@ -78,10 +78,10 @@ public class StructuredOsuMemoryReader : OsuMemoryDataProvider.StructuredOsuMemo
 		[MemoryAddress("+0x24")]
 		public string? Title { get; set; }
 
-		[MemoryAddress("+0x78")]
+		[MemoryAddress("+0x7C")]
 		public string? Creator { get; set; }
 
-		[MemoryAddress("+0xAC")]
+		[MemoryAddress("+0xB0")]
 		public string? Version { get; set; }
 	}
 }
