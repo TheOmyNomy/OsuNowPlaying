@@ -218,7 +218,7 @@ public partial class MainWindow
 		_twitchClient.ConnectAsync(username, token, channel).SafeFireAndForget(exception =>
 		{
 			Logger.Error(exception);
-			SetState(ConnectionState.Offline);
+			Dispatcher.Invoke(() => SetState(ConnectionState.Offline));
 		});
 	}
 
