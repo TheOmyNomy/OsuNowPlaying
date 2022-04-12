@@ -71,8 +71,13 @@
 
 						<TextBlock Grid.Column="0" Grid.Row="0" Margin="0,0,50,0" Name="StatusTextBlock"
 						           Text="Status: Offline" />
-						<CheckBox Grid.Column="1" Grid.Row="0" Name="AdvancedCheckBox" Content="Advanced"
-						          Checked="OnAdvancedCheckBoxChecked" Unchecked="OnAdvancedCheckBoxChecked" />
+
+						<CheckBox Grid.Column="1" Grid.Row="0" Name="AdvancedCheckBox" Checked="OnAdvancedCheckBoxChecked"
+						          Unchecked="OnAdvancedCheckBoxChecked">
+							<TextBlock TextAlignment="Right" xml:space="preserve">Advanced <Hyperlink
+								NavigateUri="https://github.com/TheOmyNomy/OsuNowPlaying/blob/master/README.md"
+								RequestNavigate="OnHyperlinkRequestNavigate" KeyboardNavigation.TabIndex="5">(?)</Hyperlink></TextBlock>
+						</CheckBox>
 					</Grid>
 				</GroupBox>
 
