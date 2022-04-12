@@ -54,6 +54,13 @@ public partial class MainWindow
 		string defaultFormat = _configuration.GetDefaultValue<string>(ConfigurationSetting.Format);
 		AdonisUI.Extensions.WatermarkExtension.SetWatermark(FormatTextBox, defaultFormat);
 
+		if (string.IsNullOrWhiteSpace(UsernameTextBox.Text))
+			UsernameTextBox.Focus();
+		else if (string.IsNullOrWhiteSpace(TokenTextBox.Password))
+			TokenTextBox.Focus();
+		else
+			LoginButton.Focus();
+
 		Task.Run(async () =>
 		{
 			UpdateManager.Clean();
