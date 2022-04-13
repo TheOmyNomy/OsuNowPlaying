@@ -11,11 +11,11 @@
 ## About
 
 osu!np is a simple application that retrieves current beatmap information (artist, creator, etc.) from osu! and sends it
-in the streamer's chat.
+to the streamer's chat.
 
 ## Installation
 
-osu!np supports Windows 7 and above.
+There is no installer because osu!np is a portable application.
 
 [Click here](https://github.com/TheOmyNomy/OsuNowPlaying/releases/latest/download/osu!np.zip) to download the latest
 version. Extract the contents and run the **osu!np** application.
@@ -29,13 +29,13 @@ The simplest way to use osu!np is with your own Twitch account.
 * Enter your username in the **Username** text field.
 * Click the **(?)** link next to the **Token** label or [click here](https://twitchapps.com/tmi/) to open the **Twitch
   Chat OAuth Password Generator** website.
-* Click the **Connect** button and then the **Authorise** button.
-* Copy the token (including the `oauth:` at the start) and paste it into the **Token** text field.
+    * Click the **Connect** button and then the **Authorise** button.
+* Copy the token (including the `oauth:` at the start) from the website and paste it into the **Token** text field.
 * Click the **Login** button.
 
-osu!np will now be listen for / respond to the command `!np` in your chat.
+osu!np will now listen for / respond to the command `!np` in your chat.
 
-## Usage (Advanced)
+### Advanced Settings
 
 ![](assets/advanced-example.png)
 
@@ -50,7 +50,10 @@ These settings are optional and will default to the text shown in grey if left e
 
 ### Patterns
 
-Patterns are only supported in the **Format** text field.
+A pattern is a placeholder for beatmap information. When the command is sent in chat, the pattern will be replaced with
+the respective beatmap information (i.e. `!artist!` is replaced with `xi`).
+
+Patterns are supported in the **Format** text field.
 
 Patterns:
 
