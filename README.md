@@ -8,21 +8,45 @@
   A now playing chat bot for osu! streamers!
 </p>
 
-<p align="center">
-  <img src="assets/application.png">
-</p>
+## About
 
-## Usage
+osu!np is a simple application that retrieves current beatmap information (artist, creator, etc.) from osu! and sends it
+in the streamer's chat.
+
+## Installation
 
 osu!np supports Windows 7 and above.
 
 [Click here](https://github.com/TheOmyNomy/OsuNowPlaying/releases/latest/download/osu!np.zip) to download the latest
 version. Extract the contents and run the **osu!np** application.
 
-## Advanced
+## Usage
 
-This section contains optional settings that allow you to change the channel osu!np listens to / responds in, the
-request command, and the response format.
+![](assets/example.png)
+
+The simplest way to use osu!np is with your own Twitch account.
+
+* Enter your username in the **Username** text field.
+* Click the **(?)** link next to the **Token** label or [click here](https://twitchapps.com/tmi/) to open the **Twitch
+  Chat OAuth Password Generator** website.
+* Click the **Connect** button and then the **Authorise** button.
+* Copy the token (including the `oauth:` at the start) and paste it into the **Token** text field.
+* Click the **Login** button.
+
+osu!np will now be listen for / respond to the command `!np` in your chat.
+
+## Usage (Advanced)
+
+![](assets/advanced-example.png)
+
+Checking the **Advanced** check box reveals additional settings that allow you to change the channel osu!np listens to /
+responds in, the request command, and the response format.
+
+These settings are optional and will default to the text shown in grey if left empty.
+
+* **Channel:** The channel osu!np will listen to / respond in.
+* **Command:** The command osu!np will respond to.
+* **Format:** The message osu!np will respond with. Supports patterns (see below).
 
 ### Patterns
 
