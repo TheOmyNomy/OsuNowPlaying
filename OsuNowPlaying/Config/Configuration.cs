@@ -23,10 +23,6 @@ public class Configuration
 				new ConfigurationObject(string.Empty)
 			},
 			{
-				ConfigurationSetting.Advanced,
-				new ConfigurationObject(false)
-			},
-			{
 				ConfigurationSetting.Channel,
 				new ConfigurationObject(string.Empty)
 			},
@@ -70,10 +66,7 @@ public class Configuration
 
 			if (Enum.TryParse(key, out ConfigurationSetting setting))
 			{
-				if (setting == ConfigurationSetting.Advanced)
-					_settings[setting].Value = value == "True";
-				else
-					_settings[setting].Value = value;
+				_settings[setting].Value = value;
 			}
 		}
 	}

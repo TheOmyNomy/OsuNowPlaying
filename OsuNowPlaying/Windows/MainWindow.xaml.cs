@@ -46,7 +46,13 @@ public partial class MainWindow
 		UsernameTextBox.Text = _configuration.GetValue<string>(ConfigurationSetting.Username);
 		TokenTextBox.Password = _configuration.GetValue<string>(ConfigurationSetting.Token);
 
-		AdvancedCheckBox.IsChecked = _configuration.GetValue<bool>(ConfigurationSetting.Advanced);
+		ChannelTextBox.Text = _configuration.GetValue<string>(ConfigurationSetting.Channel);
+
+		if (!_configuration.IsDefaultValue(ConfigurationSetting.Command))
+			CommandTextBox.Text = _configuration.GetValue<string>(ConfigurationSetting.Command);
+
+		if (!_configuration.IsDefaultValue(ConfigurationSetting.Format))
+			FormatTextBox.Text = _configuration.GetValue<string>(ConfigurationSetting.Format);
 
 		string defaultCommand = _configuration.GetDefaultValue<string>(ConfigurationSetting.Command);
 		AdonisUI.Extensions.WatermarkExtension.SetWatermark(CommandTextBox, defaultCommand);
@@ -98,7 +104,11 @@ public partial class MainWindow
 
 	private void OnTwitchClientChannelJoined(object? sender, ChannelJoinedEventArgs e)
 	{
+		_configuration.SetValue(ConfigurationSetting.Username, UsernameTextBox.Text);
+		_configuration.SetValue(ConfigurationSetting.Token, TokenTextBox.Password);
+
 		_configuration.Save();
+
 		SetState(ConnectionState.Online);
 	}
 
@@ -198,29 +208,13 @@ public partial class MainWindow
 			return;
 		}
 
-		bool advanced = AdvancedCheckBox.IsChecked.GetValueOrDefault();
-		string channel, command, format;
+		string channel = ChannelTextBox.Text;
 
-		if (advanced)
-		{
-			channel = ChannelTextBox.Text;
-			command = CommandTextBox.Text;
-			format = FormatTextBox.Text;
-		}
-		else
-		{
-			channel = _configuration.GetDefaultValue<string>(ConfigurationSetting.Channel);
-			command = _configuration.GetDefaultValue<string>(ConfigurationSetting.Command);
-			format = _configuration.GetDefaultValue<string>(ConfigurationSetting.Format);
-		}
-
-		_configuration.SetValue(ConfigurationSetting.Username, username);
-		_configuration.SetValue(ConfigurationSetting.Token, token);
-
-		_configuration.SetValue(ConfigurationSetting.Advanced, advanced);
 		_configuration.SetValue(ConfigurationSetting.Channel, channel);
-		_configuration.SetValue(ConfigurationSetting.Command, command);
-		_configuration.SetValue(ConfigurationSetting.Format, format);
+		_configuration.SetValue(ConfigurationSetting.Command, CommandTextBox.Text);
+		_configuration.SetValue(ConfigurationSetting.Format, FormatTextBox.Text);
+
+		_configuration.Save();
 
 		_twitchClient.ConnectAsync(username, token, channel).SafeFireAndForget(exception =>
 		{
@@ -237,29 +231,8 @@ public partial class MainWindow
 
 	private void OnAdvancedCheckBoxChecked(object sender, RoutedEventArgs e)
 	{
-		if (sender is not CheckBox checkBox)
-			return;
-
-		if (checkBox.IsChecked.GetValueOrDefault())
-		{
-			AdvancedGroupBox.Visibility = Visibility.Visible;
-
-			ChannelTextBox.Text = _configuration.GetValue<string>(ConfigurationSetting.Channel);
-
-			if (!_configuration.IsDefaultValue(ConfigurationSetting.Command))
-				CommandTextBox.Text = _configuration.GetValue<string>(ConfigurationSetting.Command);
-
-			if (!_configuration.IsDefaultValue(ConfigurationSetting.Format))
-				FormatTextBox.Text = _configuration.GetValue<string>(ConfigurationSetting.Format);
-		}
-		else
-		{
-			AdvancedGroupBox.Visibility = Visibility.Collapsed;
-
-			ChannelTextBox.Text = string.Empty;
-			CommandTextBox.Text = string.Empty;
-			FormatTextBox.Text = string.Empty;
-		}
+		if (sender is CheckBox checkBox)
+			AdvancedGroupBox.Visibility = checkBox.IsChecked.GetValueOrDefault() ? Visibility.Visible : Visibility.Collapsed;
 	}
 
 	private void SetState(ConnectionState state)
