@@ -6,7 +6,7 @@ namespace OsuNowPlaying.Config;
 
 public class Configuration
 {
-	private const string Path = "settings.ini";
+	private readonly string _path = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "osu!np", "settings.ini");
 
 	private readonly Dictionary<ConfigurationSetting, ConfigurationObject> _settings;
 
@@ -48,10 +48,10 @@ public class Configuration
 
 	public void Load()
 	{
-		if (!File.Exists(Path))
+		if (!File.Exists(_path))
 			return;
 
-		using FileStream stream = File.OpenRead(Path);
+		using FileStream stream = File.OpenRead(_path);
 		using StreamReader reader = new StreamReader(stream);
 
 		while (!reader.EndOfStream)
@@ -73,7 +73,9 @@ public class Configuration
 
 	public void Save()
 	{
-		using FileStream stream = File.Open(Path, FileMode.Create);
+		Directory.CreateDirectory(Path.GetDirectoryName(_path));
+
+		using FileStream stream = File.Open(_path, FileMode.Create);
 		using StreamWriter writer = new StreamWriter(stream);
 
 		foreach (var setting in _settings)
