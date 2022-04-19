@@ -21,7 +21,7 @@ public static class UpdateManager
 				return _currentVersion;
 
 			Version? assemblyVersion = Assembly.GetEntryAssembly()?.GetName().Version;
-			_currentVersion = assemblyVersion?.Major > 1 ? $"{assemblyVersion.Major}.{assemblyVersion.Minor:D2}.{assemblyVersion.Build:D2}.{assemblyVersion.Revision}" : "Unknown";
+			_currentVersion = assemblyVersion?.Major > 0 ? $"{assemblyVersion.Major}.{assemblyVersion.Minor:D2}.{assemblyVersion.Build:D2}.{assemblyVersion.Revision}" : "Unknown";
 
 			return _currentVersion;
 		}
