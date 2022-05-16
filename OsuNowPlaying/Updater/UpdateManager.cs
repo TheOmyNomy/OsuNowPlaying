@@ -1,6 +1,5 @@
 ﻿using System;
 using System.IO;
-using System.IO.Compression;
 using System.Linq;
 using System.Net.Http;
 using System.Reflection;
@@ -45,14 +44,20 @@ public static class UpdateManager
 		}
 	}
 
-	private const string WorkingPath = "Updater\\";
+	private static readonly string WorkingPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "osu!np");
+
+	private static readonly string OldExecutablePath = WorkingPath + "\\_osu!np.exe";
+	private static readonly string NewExecutablePath = WorkingPath + "\\osu!np.exe";
 
 	private static GitHubRelease? _latestRelease;
 
 	public static void Clean()
 	{
-		if (Directory.Exists(WorkingPath))
-			Directory.Delete(WorkingPath, true);
+		if (File.Exists(OldExecutablePath))
+			File.Delete(OldExecutablePath);
+
+		if (File.Exists(NewExecutablePath))
+			File.Delete(NewExecutablePath);
 	}
 
 	public static async Task<bool> CheckAsync()
@@ -76,21 +81,15 @@ public static class UpdateManager
 		if (_latestRelease == null)
 			return false;
 
-		GitHubAsset? asset = _latestRelease.Assets?.FirstOrDefault(x => x.Name == "osu!np.zip");
+		GitHubAsset? asset = _latestRelease.Assets?.FirstOrDefault(x => x.Name == "osu!np.exe");
 
 		if (asset == null)
 			return false;
 
 		Clean();
 
-		DirectoryInfo workingDirectoryInfo = Directory.CreateDirectory(WorkingPath);
-		workingDirectoryInfo.Attributes |= FileAttributes.Hidden;
-
-		string zipPath = $"{WorkingPath}{asset.Name}";
-		string extractPath = $"{zipPath.Remove(zipPath.LastIndexOf('.'))}\\";
-
 		await using Stream stream = await Client.GetStreamAsync(asset.BrowserDownloadUrl);
-		await using FileStream fileStream = new FileStream(zipPath, FileMode.Create);
+		await using FileStream fileStream = new FileStream(NewExecutablePath, FileMode.Create);
 
 		await stream.CopyToAsync(fileStream);
 		await fileStream.FlushAsync();
@@ -98,23 +97,10 @@ public static class UpdateManager
 		fileStream.Close();
 		stream.Close();
 
-		ZipFile.ExtractToDirectory(zipPath, extractPath);
+		string currentExecutablePath = Directory.GetCurrentDirectory() + "\\osu!np.exe";
 
-		foreach (string file in Directory.EnumerateFiles(extractPath))
-		{
-			string existingFile = Path.GetFileName(file);
-
-			try
-			{
-				File.Delete(existingFile);
-			}
-			catch
-			{
-				File.Move(existingFile, $"{WorkingPath}{existingFile}");
-			}
-
-			File.Move(file, existingFile);
-		}
+		File.Move(currentExecutablePath, OldExecutablePath);
+		File.Move(NewExecutablePath, currentExecutablePath);
 
 		return true;
 	}
