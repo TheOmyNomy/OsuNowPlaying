@@ -107,7 +107,14 @@ public static class UpdateManager
 
 	private static async Task<GitHubRelease?> GetLatestReleaseAsync()
 	{
-		string contents = await Client.GetStringAsync("https://api.github.com/repos/TheOmyNomy/OsuNowPlaying/releases/latest");
-		return JsonConvert.DeserializeObject<GitHubRelease>(contents);
+		try
+		{
+			string contents = await Client.GetStringAsync("https://api.github.com/repos/TheOmyNomy/OsuNowPlaying/releases/latest");
+			return JsonConvert.DeserializeObject<GitHubRelease>(contents);
+		}
+		catch
+		{
+			return null;
+		}
 	}
 }

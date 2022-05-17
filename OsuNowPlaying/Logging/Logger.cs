@@ -2,7 +2,7 @@
 
 namespace OsuNowPlaying.Logging;
 
-public class Logger
+public static class Logger
 {
 #if DEBUG
 	public static LogLevel LogLevel = LogLevel.Debug;
