@@ -22,12 +22,12 @@ namespace Klserjht
             Signatures.Add(_creatorId, new SigEx
             {
                 ParentSig = Signatures[_currentBeatmapDataId],
-                PointerOffsets = { 0x78 }
+                PointerOffsets = { 0x7C }
             });
             Signatures.Add(_versionId, new SigEx
             {
                 ParentSig = Signatures[_currentBeatmapDataId],
-                PointerOffsets = { 0xAC }
+                PointerOffsets = { 0xB0 }
             });
         }
 
