@@ -110,6 +110,7 @@ public partial class MainWindow
 		_configuration.Save();
 
 		SetState(ConnectionState.Online);
+		ErrorGroupBox.Visibility = Visibility.Collapsed;
 	}
 
 	private void OnTwitchClientMessageReceived(object? sender, MessageReceivedEventArgs e)
@@ -155,8 +156,32 @@ public partial class MainWindow
 
 	private void OnTwitchClientDisconnected(object? sender, DisconnectedEventArgs e)
 	{
-		// TODO: Display why we were disconnected if it wasn't a normal disconnection.
-		Dispatcher.Invoke(() => SetState(ConnectionState.Offline));
+		Dispatcher.Invoke(() =>
+		{
+			SetState(ConnectionState.Offline);
+
+			if (e.Reason == DisconnectReason.Normal)
+				return;
+
+			switch (e.Reason)
+			{
+				case DisconnectReason.ConnectionAborted:
+					ErrorMessageTextBlock.Text = "Error: Lost connection";
+					break;
+				case DisconnectReason.InvalidAuthenticationToken:
+				case DisconnectReason.LoginAuthenticationFailed:
+					ErrorMessageTextBlock.Text = "Error: Invalid authentication token";
+					break;
+				case DisconnectReason.InvalidChannel:
+					ErrorMessageTextBlock.Text = "Error: Invalid channel";
+					break;
+				default:
+					ErrorMessageTextBlock.Text = "Error: Unknown error";
+					break;
+			}
+
+			ErrorGroupBox.Visibility = Visibility.Visible;
+		});
 	}
 
 	private void OnAboutButtonClick(object sender, RoutedEventArgs e)
@@ -175,6 +200,11 @@ public partial class MainWindow
 			_aboutWindow.Focus();
 		else
 			_aboutWindow.Show();
+	}
+
+	private void OnErrorCloseButtonClick(object sender, RoutedEventArgs e)
+	{
+		ErrorGroupBox.Visibility = Visibility.Collapsed;
 	}
 
 	private void OnHyperlinkRequestNavigate(object sender, RequestNavigateEventArgs e)
@@ -200,8 +230,6 @@ public partial class MainWindow
 		string username = UsernameTextBox.Text;
 		string token = TokenTextBox.Password;
 
-		// TODO: Implement proper validation.
-		// TODO: Add UI feedback for validation.
 		if (string.IsNullOrWhiteSpace(username) || string.IsNullOrWhiteSpace(token))
 		{
 			SetState(ConnectionState.Offline);

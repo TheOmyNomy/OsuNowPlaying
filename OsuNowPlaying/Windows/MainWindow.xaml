@@ -24,9 +24,25 @@
 
 		<Grid.RowDefinitions>
 			<RowDefinition Height="Auto" />
+			<RowDefinition Height="Auto" />
 		</Grid.RowDefinitions>
 
-		<GroupBox Grid.Column="0" Grid.Row="0">
+		<GroupBox Grid.Column="0" Grid.Row="0" Padding="5" Name="ErrorGroupBox" Visibility="Collapsed">
+			<GroupBox.Background>#9a3333</GroupBox.Background>
+
+			<DockPanel>
+				<TextBlock VerticalAlignment="Center" Margin="5,0,0,0" Name="ErrorMessageTextBlock" Text="Error: Failed to connect" />
+
+				<Button Width="Auto" Height="25" Padding="5" HorizontalAlignment="Right" VerticalAlignment="Center"
+				        Style="{DynamicResource {x:Static adonisUi:Styles.WindowButton}}"
+				        FontFamily="Segoe UI" FontSize="12" Content="X" Click="OnErrorCloseButtonClick">
+					<Button.Background>#c44e4e</Button.Background>
+					<Button.Foreground>#ffffff</Button.Foreground>
+				</Button>
+			</DockPanel>
+		</GroupBox>
+
+		<GroupBox Grid.Column="0" Grid.Row="1">
 			<Grid HorizontalAlignment="Center" VerticalAlignment="Center" Margin="10">
 				<Grid.ColumnDefinitions>
 					<ColumnDefinition Width="Auto" />
