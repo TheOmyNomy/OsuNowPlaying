@@ -47,9 +47,13 @@
 				<TextBox Grid.Column="1" Grid.Row="0" Width="175" Margin="5,0,0,5" Name="UsernameTextBox"
 				         KeyboardNavigation.TabIndex="1" TextChanged="OnUsernameTextBoxTextChanged" />
 
-				<TextBlock Grid.Column="0" Grid.Row="1" TextAlignment="Right" xml:space="preserve">Token <Hyperlink
-					NavigateUri="https://twitchapps.com/tmi/" RequestNavigate="OnHyperlinkRequestNavigate"
-					KeyboardNavigation.TabIndex="0">(?)</Hyperlink></TextBlock>
+				<TextBlock Grid.Column="0" Grid.Row="1" TextAlignment="Right">
+					Token&nbsp;
+					<Hyperlink NavigateUri="https://twitchapps.com/tmi/" RequestNavigate="OnHyperlinkRequestNavigate"
+					           KeyboardNavigation.TabIndex="0">
+						(?)
+					</Hyperlink>
+				</TextBlock>
 
 				<PasswordBox Grid.Column="1" Grid.Row="1" Width="175" Margin="5,0,0,5" Name="TokenTextBox"
 				             KeyboardNavigation.TabIndex="2" PasswordChar="*" />
@@ -60,27 +64,21 @@
 				<Button Grid.Column="2" Grid.Row="1" Width="75" Margin="5,0,0,5" KeyboardNavigation.TabIndex="4" Content="Exit"
 				        Click="OnExitButtonClick" />
 
-				<GroupBox Grid.Column="0" Grid.Row="3" Grid.ColumnSpan="3">
-					<Grid HorizontalAlignment="Center" VerticalAlignment="Center">
-						<Grid.ColumnDefinitions>
-							<ColumnDefinition Width="Auto" />
-							<ColumnDefinition Width="Auto" />
-						</Grid.ColumnDefinitions>
+				<GroupBox Grid.Column="0" Grid.Row="3" Grid.ColumnSpan="3" Margin="0,0,0,0">
+					<DockPanel>
+						<TextBlock Name="StatusTextBlock" Text="Status: Offline" />
 
-						<Grid.RowDefinitions>
-							<RowDefinition Height="Auto" />
-						</Grid.RowDefinitions>
-
-						<TextBlock Grid.Column="0" Grid.Row="0" Margin="0,0,50,0" Name="StatusTextBlock"
-						           Text="Status: Offline" />
-
-						<CheckBox Grid.Column="1" Grid.Row="0" KeyboardNavigation.TabIndex="5" Checked="OnAdvancedCheckBoxChecked"
+						<CheckBox HorizontalAlignment="Right" KeyboardNavigation.TabIndex="5" Checked="OnAdvancedCheckBoxChecked"
 						          Unchecked="OnAdvancedCheckBoxChecked">
-							<TextBlock TextAlignment="Right" xml:space="preserve">Advanced <Hyperlink
-								NavigateUri="https://github.com/TheOmyNomy/OsuNowPlaying/blob/master/README.md"
-								RequestNavigate="OnHyperlinkRequestNavigate" KeyboardNavigation.TabIndex="6">(?)</Hyperlink></TextBlock>
+							<TextBlock TextAlignment="Right">
+								Advanced&nbsp;
+								<Hyperlink NavigateUri="https://github.com/TheOmyNomy/OsuNowPlaying/blob/master/README.md"
+								           RequestNavigate="OnHyperlinkRequestNavigate" KeyboardNavigation.TabIndex="6">
+									(?)
+								</Hyperlink>
+							</TextBlock>
 						</CheckBox>
-					</Grid>
+					</DockPanel>
 				</GroupBox>
 
 				<GroupBox Grid.Column="0" Grid.Row="4" Grid.ColumnSpan="3" Margin="0,5,0,0" Name="AdvancedGroupBox"
