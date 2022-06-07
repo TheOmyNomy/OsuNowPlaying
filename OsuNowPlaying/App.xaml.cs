@@ -1,4 +1,5 @@
 ﻿using System;
+using System.IO;
 using System.Runtime.InteropServices;
 using System.Windows;
 using Microsoft.Extensions.DependencyInjection;
@@ -18,6 +19,8 @@ public partial class App
 	private static extern bool FreeConsole();
 #endif
 
+	public static readonly string WorkingPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "osu!np");
+
 	private readonly IServiceProvider _serviceProvider;
 
 	public App()
@@ -33,6 +36,8 @@ public partial class App
 #if DEBUG
 		AllocConsole();
 #endif
+
+		Directory.CreateDirectory(WorkingPath);
 
 		_serviceProvider.GetRequiredService<Configuration>();
 		_serviceProvider.GetRequiredService<MainWindow>().Show();

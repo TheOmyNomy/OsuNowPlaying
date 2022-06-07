@@ -44,20 +44,17 @@ public static class UpdateManager
 		}
 	}
 
-	private static readonly string WorkingPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "osu!np");
-
-	private static readonly string OldExecutablePath = WorkingPath + "\\_osu!np.exe";
-	private static readonly string NewExecutablePath = WorkingPath + "\\osu!np.exe";
+	private static readonly string OldExecutablePath = Path.Combine(App.WorkingPath, "_osu!np.exe");
+	private static readonly string DownloadedExecutablePath = Path.Combine(App.WorkingPath, "osu!np.exe");
 
 	private static GitHubRelease? _latestRelease;
 
 	public static void Clean()
 	{
-		if (File.Exists(OldExecutablePath))
-			File.Delete(OldExecutablePath);
+		File.Delete(Path.Combine(App.WorkingPath, "Klserjht.exe"));
 
-		if (File.Exists(NewExecutablePath))
-			File.Delete(NewExecutablePath);
+		File.Delete(OldExecutablePath);
+		File.Delete(DownloadedExecutablePath);
 	}
 
 	public static async Task<bool> CheckAsync()
@@ -89,7 +86,7 @@ public static class UpdateManager
 		Clean();
 
 		await using Stream stream = await Client.GetStreamAsync(asset.BrowserDownloadUrl);
-		await using FileStream fileStream = new FileStream(NewExecutablePath, FileMode.Create);
+		await using FileStream fileStream = new FileStream(DownloadedExecutablePath, FileMode.Create);
 
 		await stream.CopyToAsync(fileStream);
 		await fileStream.FlushAsync();
@@ -99,8 +96,8 @@ public static class UpdateManager
 
 		string currentExecutablePath = Directory.GetCurrentDirectory() + "\\osu!np.exe";
 
-		File.Move(currentExecutablePath, OldExecutablePath);
-		File.Move(NewExecutablePath, currentExecutablePath);
+		File.Move(currentExecutablePath, OldExecutablePath, true);
+		File.Move(DownloadedExecutablePath, currentExecutablePath, true);
 
 		return true;
 	}

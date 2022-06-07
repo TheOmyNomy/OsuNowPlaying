@@ -6,7 +6,7 @@ namespace OsuNowPlaying.Config;
 
 public class Configuration
 {
-	private readonly string _path = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "osu!np", "settings.ini");
+	private readonly string _path = Path.Combine(App.WorkingPath, "settings.ini");
 
 	private readonly Dictionary<ConfigurationSetting, ConfigurationObject> _settings;
 
@@ -73,8 +73,6 @@ public class Configuration
 
 	public void Save()
 	{
-		Directory.CreateDirectory(Path.GetDirectoryName(_path));
-
 		using FileStream stream = File.Open(_path, FileMode.Create);
 		using StreamWriter writer = new StreamWriter(stream);
 
