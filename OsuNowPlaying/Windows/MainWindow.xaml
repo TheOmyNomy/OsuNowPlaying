@@ -25,24 +25,51 @@
 		<Grid.RowDefinitions>
 			<RowDefinition Height="Auto" />
 			<RowDefinition Height="Auto" />
+			<RowDefinition Height="Auto" />
 		</Grid.RowDefinitions>
 
-		<GroupBox Grid.Column="0" Grid.Row="0" Padding="5" Name="ErrorGroupBox" Visibility="Collapsed">
+		<GroupBox Grid.Column="0" Grid.Row="0" Padding="5" Name="UpdateBannerGroupBox" Visibility="Collapsed">
+			<GroupBox.Background>#425595</GroupBox.Background>
+
+			<DockPanel>
+				<TextBlock VerticalAlignment="Center" Margin="5,0,0,0" Name="UpdateBannerMessageTextBlock"
+				           Text="An update is available!" />
+
+				<DockPanel HorizontalAlignment="Right" Name="UpdateBannerButtonDockPanel">
+					<Button Width="Auto" Height="25" Padding="5" Margin="0,0,5,0" HorizontalAlignment="Right"
+					        VerticalAlignment="Center" Style="{DynamicResource {x:Static adonisUi:Styles.WindowButton}}"
+					        FontFamily="Segoe UI" FontSize="12" Content="Update" Click="OnUpdateBannerUpdateButtonClick">
+						<Button.Background>#6477b7</Button.Background>
+						<Button.Foreground>#ffffff</Button.Foreground>
+					</Button>
+
+					<Button Width="Auto" Height="25" Padding="5" HorizontalAlignment="Right" VerticalAlignment="Center"
+					        Style="{DynamicResource {x:Static adonisUi:Styles.WindowButton}}"
+					        FontFamily="Segoe UI" FontSize="12" Content="Ignore" Click="OnUpdateBannerIgnoreButtonClick">
+						<Button.Background>#6477b7</Button.Background>
+						<Button.Foreground>#ffffff</Button.Foreground>
+					</Button>
+				</DockPanel>
+			</DockPanel>
+		</GroupBox>
+
+		<GroupBox Grid.Column="0" Grid.Row="1" Padding="5" Name="ErrorBannerGroupBox" Visibility="Collapsed">
 			<GroupBox.Background>#9a3333</GroupBox.Background>
 
 			<DockPanel>
-				<TextBlock VerticalAlignment="Center" Margin="5,0,0,0" Name="ErrorMessageTextBlock" Text="Error: Failed to connect" />
+				<TextBlock VerticalAlignment="Center" Margin="5,0,0,0" Name="ErrorBannerMessageTextBlock"
+				           Text="Error: Unknown error" />
 
 				<Button Width="Auto" Height="25" Padding="5" HorizontalAlignment="Right" VerticalAlignment="Center"
 				        Style="{DynamicResource {x:Static adonisUi:Styles.WindowButton}}"
-				        FontFamily="Segoe UI" FontSize="12" Content="X" Click="OnErrorCloseButtonClick">
-					<Button.Background>#c44e4e</Button.Background>
+				        FontFamily="Segoe UI" FontSize="12" Content="X" Click="OnErrorBannerCloseButtonClick">
+					<Button.Background>#bc5555</Button.Background>
 					<Button.Foreground>#ffffff</Button.Foreground>
 				</Button>
 			</DockPanel>
 		</GroupBox>
 
-		<GroupBox Grid.Column="0" Grid.Row="1">
+		<GroupBox Grid.Column="0" Grid.Row="2">
 			<Grid HorizontalAlignment="Center" VerticalAlignment="Center" Margin="10">
 				<Grid.ColumnDefinitions>
 					<ColumnDefinition Width="Auto" />

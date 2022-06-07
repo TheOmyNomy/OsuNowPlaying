@@ -84,10 +84,8 @@ public partial class MainWindow
 
 			Dispatcher.Invoke(() =>
 			{
-				new UpdateWindow
-				{
-					Owner = this
-				}.Show();
+				UpdateBannerMessageTextBlock.Text = $"Update {UpdateManager.LatestVersion} is available!";
+				UpdateBannerGroupBox.Visibility = Visibility.Visible;
 			});
 		});
 	}
@@ -110,7 +108,7 @@ public partial class MainWindow
 		_configuration.Save();
 
 		SetState(ConnectionState.Online);
-		ErrorGroupBox.Visibility = Visibility.Collapsed;
+		ErrorBannerGroupBox.Visibility = Visibility.Collapsed;
 	}
 
 	private void OnTwitchClientMessageReceived(object? sender, MessageReceivedEventArgs e)
@@ -166,21 +164,21 @@ public partial class MainWindow
 			switch (e.Reason)
 			{
 				case DisconnectReason.ConnectionAborted:
-					ErrorMessageTextBlock.Text = "Error: Lost connection";
+					ErrorBannerMessageTextBlock.Text = "Error: Connection lost";
 					break;
 				case DisconnectReason.InvalidAuthenticationToken:
 				case DisconnectReason.LoginAuthenticationFailed:
-					ErrorMessageTextBlock.Text = "Error: Invalid authentication token";
+					ErrorBannerMessageTextBlock.Text = "Error: Invalid authentication token";
 					break;
 				case DisconnectReason.InvalidChannel:
-					ErrorMessageTextBlock.Text = "Error: Invalid channel";
+					ErrorBannerMessageTextBlock.Text = "Error: Invalid channel";
 					break;
 				default:
-					ErrorMessageTextBlock.Text = "Error: Unknown error";
+					ErrorBannerMessageTextBlock.Text = "Error: Unknown error";
 					break;
 			}
 
-			ErrorGroupBox.Visibility = Visibility.Visible;
+			ErrorBannerGroupBox.Visibility = Visibility.Visible;
 		});
 	}
 
@@ -202,9 +200,40 @@ public partial class MainWindow
 			_aboutWindow.Show();
 	}
 
-	private void OnErrorCloseButtonClick(object sender, RoutedEventArgs e)
+	private void OnUpdateBannerUpdateButtonClick(object sender, RoutedEventArgs e)
 	{
-		ErrorGroupBox.Visibility = Visibility.Collapsed;
+		Logger.Debug("Updating...");
+
+		UpdateBannerMessageTextBlock.Text = "Updating...";
+		UpdateBannerButtonDockPanel.Visibility = Visibility.Hidden;
+
+		bool result = UpdateManager.ApplyAsync().GetAwaiter().GetResult();
+
+		if (!result)
+		{
+			Logger.Error("Failed to automatically update!");
+			Logger.Debug("Opening latest release in default browser...");
+
+			UpdateBannerMessageTextBlock.Text = "Opening latest release in default browser...";
+
+			Process.Start("explorer.exe", $"https://github.com/TheOmyNomy/OsuNowPlaying/releases/{UpdateManager.LatestVersion}");
+			return;
+		}
+
+		Logger.Debug("Update complete! Restarting...");
+
+		Process.Start("osu!np.exe");
+		Dispatcher.Invoke(Application.Current.Shutdown);
+	}
+
+	private void OnUpdateBannerIgnoreButtonClick(object sender, RoutedEventArgs e)
+	{
+		UpdateBannerGroupBox.Visibility = Visibility.Collapsed;
+	}
+
+	private void OnErrorBannerCloseButtonClick(object sender, RoutedEventArgs e)
+	{
+		ErrorBannerGroupBox.Visibility = Visibility.Collapsed;
 	}
 
 	private void OnHyperlinkRequestNavigate(object sender, RequestNavigateEventArgs e)
