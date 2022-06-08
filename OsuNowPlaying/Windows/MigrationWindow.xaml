@@ -1,0 +1,62 @@
+﻿<controls:AdonisWindow x:Class="OsuNowPlaying.Windows.MigrationWindow"
+                       xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                       xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                       xmlns:controls="clr-namespace:AdonisUI.Controls;assembly=AdonisUI"
+                       Title="Welcome to osu!np" Width="279" Height="323" ResizeMode="NoResize"
+                       WindowStartupLocation="CenterOwner">
+
+	<Window.Style>
+		<Style TargetType="Window" BasedOn="{StaticResource {x:Type Window}}" />
+	</Window.Style>
+
+	<Grid HorizontalAlignment="Center" VerticalAlignment="Center">
+		<Grid.ColumnDefinitions>
+			<ColumnDefinition Width="Auto" />
+		</Grid.ColumnDefinitions>
+
+		<Grid.RowDefinitions>
+			<RowDefinition Height="Auto" />
+		</Grid.RowDefinitions>
+
+		<GroupBox Grid.Column="0" Grid.Row="0">
+			<Grid HorizontalAlignment="Center" VerticalAlignment="Center" Margin="10">
+				<Grid.ColumnDefinitions>
+					<ColumnDefinition Width="Auto" />
+				</Grid.ColumnDefinitions>
+
+				<Grid.RowDefinitions>
+					<RowDefinition Height="Auto" />
+					<RowDefinition Height="Auto" />
+					<RowDefinition Height="Auto" />
+					<RowDefinition Height="Auto" />
+					<RowDefinition Height="Auto" />
+					<RowDefinition Height="Auto" />
+					<RowDefinition Height="Auto" />
+				</Grid.RowDefinitions>
+
+				<Image Grid.Column="0" Grid.Row="0" Width="64" Height="64" Margin="0,0,0,10"
+				       Source="pack://application:,,,/icon.ico" />
+
+				<TextBlock Grid.Column="0" Grid.Row="1" Width="241" Margin="0,0,0,10" TextAlignment="Center" FontSize="16"
+				           FontWeight="SemiBold" TextWrapping="Wrap">
+					Welcome to osu!np,<LineBreak />the successor to Klserjht
+				</TextBlock>
+
+				<TextBlock Grid.Column="0" Grid.Row="2" Width="241" Margin="0,0,0,10" TextAlignment="Center" TextWrapping="Wrap"
+				           Text="All the same features but in a modern design." />
+
+				<TextBlock Grid.Column="0" Grid.Row="3" Width="241" Margin="0,0,0,10" TextAlignment="Center" TextWrapping="Wrap"
+				           Text="Your settings have been migrated over." />
+
+				<TextBlock Grid.Column="0" Grid.Row="4" Width="241" Margin="0,0,0,10" TextAlignment="Center" TextWrapping="Wrap"
+				           xml:space="preserve"><Hyperlink
+					                                NavigateUri="https://github.com/TheOmyNomy/OsuNowPlaying/blob/master/README.md"
+					                                RequestNavigate="OnHyperlinkRequestNavigate">Click here</Hyperlink> to learn more.</TextBlock>
+
+				<TextBlock Grid.Column="0" Grid.Row="5" Margin="0,0,0,10" TextAlignment="Center" Text="Enjoy!" />
+
+				<Button Grid.Column="0" Grid.Row="6" Width="75" Content="Done" Click="OnDoneButtonClick" />
+			</Grid>
+		</GroupBox>
+	</Grid>
+</controls:AdonisWindow>

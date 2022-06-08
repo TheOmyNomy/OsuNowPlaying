@@ -29,7 +29,7 @@ internal static class Program
 		File.Delete("OsuMemoryDataProvider.dll");
 		File.Delete("ProcessMemoryDataFinder.dll");
 
-		Process.Start("osu!np.exe");
+		Process.Start("osu!np.exe", "--migration");
 	}
 
 	private static async Task ConvertKlserjhtConfigurationAsync(string inputPath, string outputPath)

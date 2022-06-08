@@ -38,9 +38,23 @@ public partial class App
 #endif
 
 		Directory.CreateDirectory(WorkingPath);
-
 		_serviceProvider.GetRequiredService<Configuration>();
-		_serviceProvider.GetRequiredService<MainWindow>().Show();
+
+		MainWindow mainWindow = _serviceProvider.GetRequiredService<MainWindow>();
+		mainWindow.Show();
+
+		string[] args = Environment.GetCommandLineArgs();
+
+		foreach (string arg in args)
+		{
+			if (arg == "--migration")
+			{
+				new MigrationWindow
+				{
+					Owner = mainWindow
+				}.Show();
+			}
+		}
 	}
 
 #if DEBUG
