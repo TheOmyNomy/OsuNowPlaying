@@ -222,7 +222,7 @@ public partial class MainWindow
 
 		Logger.Debug("Update complete! Restarting...");
 
-		Process.Start("osu!np.exe");
+		Process.Start("osu-np.exe");
 		Dispatcher.Invoke(Application.Current.Shutdown);
 	}
 

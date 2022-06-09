@@ -44,8 +44,8 @@ public static class UpdateManager
 		}
 	}
 
-	private static readonly string OldExecutablePath = Path.Combine(App.WorkingPath, "_osu!np.exe");
-	private static readonly string DownloadedExecutablePath = Path.Combine(App.WorkingPath, "osu!np.exe");
+	private static readonly string OldExecutablePath = Path.Combine(App.WorkingPath, "_osu-np.exe");
+	private static readonly string DownloadedExecutablePath = Path.Combine(App.WorkingPath, "osu-np.exe");
 
 	private static GitHubRelease? _latestRelease;
 
@@ -78,7 +78,7 @@ public static class UpdateManager
 		if (_latestRelease == null)
 			return false;
 
-		GitHubAsset? asset = _latestRelease.Assets?.FirstOrDefault(x => x.Name == "osu!np.exe");
+		GitHubAsset? asset = _latestRelease.Assets?.FirstOrDefault(x => x.Name == "osu-np.exe");
 
 		if (asset == null)
 			return false;
@@ -94,7 +94,7 @@ public static class UpdateManager
 		fileStream.Close();
 		stream.Close();
 
-		string currentExecutablePath = Directory.GetCurrentDirectory() + "\\osu!np.exe";
+		string currentExecutablePath = Directory.GetCurrentDirectory() + "\\osu-np.exe";
 
 		File.Move(currentExecutablePath, OldExecutablePath, true);
 		File.Move(DownloadedExecutablePath, currentExecutablePath, true);

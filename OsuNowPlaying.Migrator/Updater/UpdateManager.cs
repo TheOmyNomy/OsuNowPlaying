@@ -20,8 +20,8 @@ public static class UpdateManager
 		}
 	}
 
-	private static readonly string DownloadedExecutablePath = Path.Combine(Program.WorkingPath, "osu!np.exe");
-	private static readonly string NewExecutablePath = Path.Combine(Directory.GetCurrentDirectory(), "osu!np.exe");
+	private static readonly string DownloadedExecutablePath = Path.Combine(Program.WorkingPath, "osu-np.exe");
+	private static readonly string NewExecutablePath = Path.Combine(Directory.GetCurrentDirectory(), "osu-np.exe");
 
 	private static void Clean()
 	{
@@ -38,7 +38,7 @@ public static class UpdateManager
 		if (latestRelease == null)
 			return false;
 
-		GitHubAsset? asset = latestRelease.Assets?.FirstOrDefault(x => x.Name == "osu!np.exe");
+		GitHubAsset? asset = latestRelease.Assets?.FirstOrDefault(x => x.Name == "osu-np.exe");
 
 		if (asset == null)
 			return false;
