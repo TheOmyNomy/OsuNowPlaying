@@ -15,10 +15,8 @@ to the streamer's chat.
 
 ## Installation
 
-There is no installer because osu!np is a portable application.
-
-[Click here](https://github.com/TheOmyNomy/OsuNowPlaying/releases/latest/download/osu!np.zip) to download the latest
-version. Extract the contents and run the **osu!np** application.
+[Click here](https://github.com/TheOmyNomy/OsuNowPlaying/releases/latest/download/osu!np.exe) to download the latest
+version.
 
 ## Usage
 
