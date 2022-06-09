@@ -8,6 +8,11 @@
 
 		<!-- Klserjht.Updater tries to run "Klserjht.exe" after an update, so we must name the migrator as such. -->
 		<AssemblyName>Klserjht</AssemblyName>
+
+		<FileVersion>0.0.0.0</FileVersion>
+		<Version>0.0.0.0</Version>
+
+		<Copyright>Copyright (c) 2018 - 2022 TheOmyNomy</Copyright>
 	</PropertyGroup>
 
 	<ItemGroup>
