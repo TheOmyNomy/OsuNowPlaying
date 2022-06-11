@@ -2,7 +2,7 @@
                        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
                        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                        xmlns:controls="clr-namespace:AdonisUI.Controls;assembly=AdonisUI"
-                       Title="Migrator" Width="291" Height="277" ResizeMode="NoResize"
+                       Title="Migrator" Width="306" Height="277" ResizeMode="NoResize"
                        WindowStartupLocation="CenterScreen">
 
 	<Window.Style>
@@ -38,15 +38,16 @@
 				<Image Grid.Column="0" Grid.Row="0" Width="64" Height="64" Margin="0,0,0,10"
 				       Source="pack://application:,,,/icon.ico" />
 
-				<TextBlock Grid.Column="0" Grid.Row="1" Width="253" Margin="0,0,0,10" TextAlignment="Center" FontSize="16"
+				<TextBlock Grid.Column="0" Grid.Row="1" Width="268" Margin="0,0,0,10" TextAlignment="Center" FontSize="16"
 				           FontWeight="SemiBold" TextWrapping="Wrap">
 					You're being upgraded to osu!np,<LineBreak />the successor to Klserjht
 				</TextBlock>
 
-				<TextBlock Grid.Column="0" Grid.Row="2" Width="253" Margin="0,0,0,10" TextAlignment="Center" TextWrapping="Wrap"
-				           Text="There's some housekeeping we need to do before you can start using osu!np." />
+				<TextBlock Grid.Column="0" Grid.Row="2" Width="268" Margin="0,0,0,10" TextAlignment="Center" TextWrapping="Wrap">
+					There's some housekeeping we need to do<LineBreak />before you can start using osu!np.
+				</TextBlock>
 
-				<TextBlock Grid.Column="0" Grid.Row="3" Width="253" Margin="0,0,0,10" TextAlignment="Center" TextWrapping="Wrap"
+				<TextBlock Grid.Column="0" Grid.Row="3" Width="268" Margin="0,0,0,10" TextAlignment="Center" TextWrapping="Wrap"
 				           Text="It won't take long!" />
 
 				<GroupBox Grid.Column="0" Grid.Row="4" Margin="0,0,0,10" Name="ErrorGroupBox" Visibility="Collapsed">
@@ -62,7 +63,7 @@
 							<RowDefinition Height="Auto" />
 						</Grid.RowDefinitions>
 
-						<TextBlock Grid.Column="0" Grid.Row="0" Width="233" TextAlignment="Center" TextWrapping="Wrap"
+						<TextBlock Grid.Column="0" Grid.Row="0" Width="248" TextAlignment="Center" TextWrapping="Wrap"
 						           Name="ErrorTextBlock" />
 					</Grid>
 				</GroupBox>
@@ -78,10 +79,10 @@
 						<RowDefinition Height="Auto" />
 					</Grid.RowDefinitions>
 
-					<TextBlock Grid.Column="0" Grid.Row="0" Margin="0,0,0,5" TextAlignment="Center" Name="StatusTextBlock"
+					<TextBlock Grid.Column="0" Grid.Row="0" Width="248" Margin="0,0,0,5" TextAlignment="Center" Name="StatusTextBlock"
 					           Text="Searching for .NET 6 installation..." />
 
-					<ProgressBar Grid.Column="0" Grid.Row="1" Width="233" Height="15" Name="StatusProgressBar" />
+					<ProgressBar Grid.Column="0" Grid.Row="1" Width="248" Height="15" Name="StatusProgressBar" />
 				</Grid>
 
 				<Button Grid.Column="0" Grid.Row="6" Width="75" Margin="0,0,0,5" Name="HelpButton" Content="Help"

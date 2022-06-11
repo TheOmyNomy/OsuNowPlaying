@@ -15,6 +15,8 @@ public partial class MigrationWindow
 
 	private void OnLoaded(object sender, RoutedEventArgs e)
 	{
+		SizeToContent = SizeToContent.WidthAndHeight;
+
 		string klserjhtPath = Path.Combine(App.WorkingPath, "Klserjht");
 
 		if (Directory.Exists(klserjhtPath))
