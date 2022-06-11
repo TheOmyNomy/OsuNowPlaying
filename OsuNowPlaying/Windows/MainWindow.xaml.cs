@@ -207,23 +207,26 @@ public partial class MainWindow
 		UpdateBannerMessageTextBlock.Text = "Updating...";
 		UpdateBannerButtonDockPanel.Visibility = Visibility.Hidden;
 
-		bool result = UpdateManager.ApplyAsync().GetAwaiter().GetResult();
-
-		if (!result)
+		Task.Run(async () =>
 		{
-			Logger.Error("Failed to automatically update!");
-			Logger.Debug("Opening latest release in default browser...");
+			bool result = await UpdateManager.ApplyAsync();
 
-			UpdateBannerMessageTextBlock.Text = "Opening latest release in default browser...";
+			if (!result)
+			{
+				Logger.Error("Failed to automatically update!");
+				Logger.Debug("Opening latest release in browser...");
 
-			Process.Start("explorer.exe", $"https://github.com/TheOmyNomy/OsuNowPlaying/releases/{UpdateManager.LatestVersion}");
-			return;
-		}
+				Dispatcher.Invoke(() => UpdateBannerMessageTextBlock.Text = "Opening latest release in browser...");
 
-		Logger.Debug("Update complete! Restarting...");
+				Process.Start("explorer.exe", $"https://github.com/TheOmyNomy/OsuNowPlaying/releases/{UpdateManager.LatestVersion}");
+				return;
+			}
 
-		Process.Start("osu-np.exe");
-		Dispatcher.Invoke(Application.Current.Shutdown);
+			Logger.Debug("Update complete! Restarting...");
+
+			Process.Start("osu-np.exe");
+			Dispatcher.Invoke(Application.Current.Shutdown);
+		});
 	}
 
 	private void OnUpdateBannerIgnoreButtonClick(object sender, RoutedEventArgs e)
