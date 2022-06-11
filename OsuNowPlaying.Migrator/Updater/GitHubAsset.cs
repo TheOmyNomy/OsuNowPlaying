@@ -1,12 +1,13 @@
 ﻿using Newtonsoft.Json;
 
-namespace OsuNowPlaying.Migrator.Updater;
-
-public class GitHubAsset
+namespace OsuNowPlaying.Migrator.Updater
 {
-	[JsonProperty("name")]
-	public string Name { get; set; } = null!;
+	public class GitHubAsset
+	{
+		[JsonProperty("name")]
+		public string Name { get; set; }
 
-	[JsonProperty("browser_download_url")]
-	public string BrowserDownloadUrl { get; set; } = null!;
+		[JsonProperty("browser_download_url")]
+		public string BrowserDownloadUrl { get; set; }
+	}
 }

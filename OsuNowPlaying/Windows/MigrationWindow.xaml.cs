@@ -1,4 +1,5 @@
 ﻿using System.Diagnostics;
+using System.IO;
 using System.Windows;
 using System.Windows.Navigation;
 
@@ -9,6 +10,17 @@ public partial class MigrationWindow
 	public MigrationWindow()
 	{
 		InitializeComponent();
+		Loaded += OnLoaded;
+	}
+
+	private void OnLoaded(object sender, RoutedEventArgs e)
+	{
+		string klserjhtPath = Path.Combine(App.WorkingPath, "Klserjht");
+
+		if (Directory.Exists(klserjhtPath))
+			Directory.Delete(klserjhtPath, true);
+
+		File.Delete(Path.Combine(App.WorkingPath, "windowsdesktop-runtime-win-x64.exe"));
 	}
 
 	private void OnHyperlinkRequestNavigate(object sender, RequestNavigateEventArgs e)

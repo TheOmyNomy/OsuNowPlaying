@@ -53,9 +53,10 @@
 					                                NavigateUri="https://github.com/TheOmyNomy/OsuNowPlaying/blob/master/README.md"
 					                                RequestNavigate="OnHyperlinkRequestNavigate">Click here</Hyperlink> to learn more.</TextBlock>
 
-				<TextBlock Grid.Column="0" Grid.Row="5" Margin="0,0,0,10" TextAlignment="Center" Text="Enjoy!" />
+				<TextBlock Grid.Column="0" Grid.Row="5" Width="241" Margin="0,0,0,10" TextAlignment="Center" TextWrapping="Wrap"
+				           Text="Enjoy!" />
 
-				<Button Grid.Column="0" Grid.Row="6" Width="75" Content="Done" Click="OnDoneButtonClick" />
+				<Button Grid.Column="0" Grid.Row="6" Width="75" Content="Start" Click="OnDoneButtonClick" />
 			</Grid>
 		</GroupBox>
 	</Grid>

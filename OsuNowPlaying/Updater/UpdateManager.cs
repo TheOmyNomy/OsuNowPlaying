@@ -51,8 +51,6 @@ public static class UpdateManager
 
 	public static void Clean()
 	{
-		File.Delete(Path.Combine(App.WorkingPath, "Klserjht.exe"));
-
 		File.Delete(OldExecutablePath);
 		File.Delete(DownloadedExecutablePath);
 	}

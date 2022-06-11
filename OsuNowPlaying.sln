@@ -2,7 +2,7 @@
 Microsoft Visual Studio Solution File, Format Version 12.00
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OsuNowPlaying", "OsuNowPlaying\OsuNowPlaying.csproj", "{DB250CD0-9E8C-4D8E-9DB6-693067F67E1B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OsuNowPlaying.Migrator", "OsuNowPlaying.Migrator\OsuNowPlaying.Migrator.csproj", "{F947FE8F-73FA-45D6-AC1E-928706620C61}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OsuNowPlaying.Migrator", "OsuNowPlaying.Migrator\OsuNowPlaying.Migrator.csproj", "{D85B7CE2-A81A-4830-A3B3-3405862A8717}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -14,9 +14,9 @@ Global
 		{DB250CD0-9E8C-4D8E-9DB6-693067F67E1B}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{DB250CD0-9E8C-4D8E-9DB6-693067F67E1B}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{DB250CD0-9E8C-4D8E-9DB6-693067F67E1B}.Release|Any CPU.Build.0 = Release|Any CPU
-		{F947FE8F-73FA-45D6-AC1E-928706620C61}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{F947FE8F-73FA-45D6-AC1E-928706620C61}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{F947FE8F-73FA-45D6-AC1E-928706620C61}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{F947FE8F-73FA-45D6-AC1E-928706620C61}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D85B7CE2-A81A-4830-A3B3-3405862A8717}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D85B7CE2-A81A-4830-A3B3-3405862A8717}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D85B7CE2-A81A-4830-A3B3-3405862A8717}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D85B7CE2-A81A-4830-A3B3-3405862A8717}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal

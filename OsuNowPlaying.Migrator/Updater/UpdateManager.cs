@@ -1,74 +1,77 @@
-﻿using Newtonsoft.Json;
+﻿using System.IO;
+using System.Linq;
+using System.Net.Http;
+using System.Threading.Tasks;
+using Newtonsoft.Json;
 
-namespace OsuNowPlaying.Migrator.Updater;
-
-public static class UpdateManager
+namespace OsuNowPlaying.Migrator.Updater
 {
-	private static HttpClient? _client;
-
-	private static HttpClient Client
+	public static class UpdateManager
 	{
-		get
+		private static HttpClient _client;
+
+		private static HttpClient Client
 		{
-			if (_client == null)
+			get
 			{
-				_client = new HttpClient();
-				_client.DefaultRequestHeaders.UserAgent.ParseAdd("Mozilla/5.0 (Windows NT 10.0; rv:91.0) Gecko/20100101 Firefox/91.0");
+				if (_client == null)
+				{
+					_client = new HttpClient();
+					_client.DefaultRequestHeaders.UserAgent.ParseAdd("Mozilla/5.0 (Windows NT 10.0; rv:91.0) Gecko/20100101 Firefox/91.0");
+				}
+
+				return _client;
 			}
-
-			return _client;
 		}
-	}
 
-	private static readonly string DownloadedExecutablePath = Path.Combine(Program.WorkingPath, "osu-np.exe");
-	private static readonly string NewExecutablePath = Path.Combine(Directory.GetCurrentDirectory(), "osu-np.exe");
+		private static readonly string DownloadedExecutablePath = Path.Combine(App.WorkingPath, "osu-np.exe");
+		private static readonly string NewExecutablePath = Path.Combine(Directory.GetCurrentDirectory(), "osu-np.exe");
 
-	private static void Clean()
-	{
-		File.Delete(Path.Combine(Program.WorkingPath, "Klserjht.exe"));
-
-		File.Delete(DownloadedExecutablePath);
-		File.Delete(NewExecutablePath);
-	}
-
-	public static async Task<bool> ApplyAsync()
-	{
-		GitHubRelease? latestRelease = await GetLatestReleaseAsync();
-
-		if (latestRelease == null)
-			return false;
-
-		GitHubAsset? asset = latestRelease.Assets?.FirstOrDefault(x => x.Name == "osu-np.exe");
-
-		if (asset == null)
-			return false;
-
-		Clean();
-
-		await using Stream stream = await Client.GetStreamAsync(asset.BrowserDownloadUrl);
-		await using FileStream fileStream = new FileStream(DownloadedExecutablePath, FileMode.Create);
-
-		await stream.CopyToAsync(fileStream);
-		await fileStream.FlushAsync();
-
-		fileStream.Close();
-		stream.Close();
-
-		File.Move(DownloadedExecutablePath, NewExecutablePath, true);
-
-		return true;
-	}
-
-	private static async Task<GitHubRelease?> GetLatestReleaseAsync()
-	{
-		try
+		private static void Clean()
 		{
-			string contents = await Client.GetStringAsync("https://api.github.com/repos/TheOmyNomy/OsuNowPlaying/releases/latest");
-			return JsonConvert.DeserializeObject<GitHubRelease>(contents);
+			File.Delete(DownloadedExecutablePath);
+			File.Delete(NewExecutablePath);
 		}
-		catch
+
+		public static async Task<bool> ApplyAsync()
 		{
-			return null;
+			GitHubRelease latestRelease = await GetLatestReleaseAsync();
+
+			if (latestRelease == null)
+				return false;
+
+			GitHubAsset asset = latestRelease.Assets?.FirstOrDefault(x => x.Name == "osu-np.exe");
+
+			if (asset == null)
+				return false;
+
+			Clean();
+
+			Stream stream = await Client.GetStreamAsync(asset.BrowserDownloadUrl);
+			FileStream fileStream = new FileStream(DownloadedExecutablePath, FileMode.Create);
+
+			await stream.CopyToAsync(fileStream);
+			await fileStream.FlushAsync();
+
+			fileStream.Close();
+			stream.Close();
+
+			File.Move(DownloadedExecutablePath, NewExecutablePath);
+
+			return true;
+		}
+
+		private static async Task<GitHubRelease> GetLatestReleaseAsync()
+		{
+			try
+			{
+				string contents = await Client.GetStringAsync("https://api.github.com/repos/TheOmyNomy/OsuNowPlaying/releases/latest");
+				return JsonConvert.DeserializeObject<GitHubRelease>(contents);
+			}
+			catch
+			{
+				return null;
+			}
 		}
 	}
 }

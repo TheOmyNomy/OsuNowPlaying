@@ -1,32 +1,34 @@
-﻿using Newtonsoft.Json;
+﻿using System.IO;
+using Newtonsoft.Json;
 
-namespace OsuNowPlaying.Migrator;
-
-public class KlserjhtConfiguration
+namespace OsuNowPlaying.Migrator
 {
-	[JsonProperty("username")]
-	public string? Username { get; set; }
-
-	[JsonProperty("token")]
-	public string? Token { get; set; }
-
-	[JsonProperty("channel")]
-	public string? Channel { get; set; }
-
-	[JsonProperty("format")]
-	public string? Format { get; set; }
-
-	[JsonProperty("command")]
-	public string? Command { get; set; }
-
-	public static KlserjhtConfiguration? Parse(string path)
+	public class KlserjhtConfiguration
 	{
-		if (!File.Exists(path))
-			return null;
+		[JsonProperty("username")]
+		public string Username { get; set; }
 
-		string contents = File.ReadAllText(path);
-		KlserjhtConfiguration? configuration = JsonConvert.DeserializeObject<KlserjhtConfiguration>(contents);
+		[JsonProperty("token")]
+		public string Token { get; set; }
 
-		return configuration;
+		[JsonProperty("channel")]
+		public string Channel { get; set; }
+
+		[JsonProperty("format")]
+		public string Format { get; set; }
+
+		[JsonProperty("command")]
+		public string Command { get; set; }
+
+		public static KlserjhtConfiguration Parse(string path)
+		{
+			if (!File.Exists(path))
+				return null;
+
+			string contents = File.ReadAllText(path);
+			KlserjhtConfiguration configuration = JsonConvert.DeserializeObject<KlserjhtConfiguration>(contents);
+
+			return configuration;
+		}
 	}
 }
