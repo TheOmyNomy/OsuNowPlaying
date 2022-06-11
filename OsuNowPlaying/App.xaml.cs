@@ -1,9 +1,11 @@
 ﻿using System;
 using System.IO;
+using System.Net;
 using System.Runtime.InteropServices;
 using System.Windows;
 using Microsoft.Extensions.DependencyInjection;
 using OsuNowPlaying.Config;
+using OsuNowPlaying.Shared.Utilities;
 using OsuNowPlaying.Windows;
 
 namespace OsuNowPlaying;
@@ -36,6 +38,9 @@ public partial class App
 #if DEBUG
 		AllocConsole();
 #endif
+
+		if (new Version(OSVersionInfo.MajorVersion, OSVersionInfo.MinorVersion) < new Version(6, 2))
+			ServicePointManager.SecurityProtocol |= SecurityProtocolType.Tls12;
 
 		Directory.CreateDirectory(WorkingPath);
 		_serviceProvider.GetRequiredService<Configuration>();

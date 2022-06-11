@@ -136,4 +136,11 @@
 	<ItemGroup>
 		<Resource Include="icon.ico" />
 	</ItemGroup>
+
+	<ItemGroup>
+		<ProjectReference Include="..\OsuNowPlaying.Shared\OsuNowPlaying.Shared.csproj">
+			<Project>{a9ecbf99-5ac7-4736-a486-458fa9dd6021}</Project>
+			<Name>OsuNowPlaying.Shared</Name>
+		</ProjectReference>
+	</ItemGroup>
 </Project>

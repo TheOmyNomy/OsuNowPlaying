@@ -1,8 +1,11 @@
-﻿using System.Diagnostics;
+﻿using System;
+using System.Diagnostics;
 using System.IO;
+using System.Net;
 using System.Threading.Tasks;
 using System.Windows;
 using OsuNowPlaying.Migrator.Updater;
+using OsuNowPlaying.Shared.Utilities;
 
 namespace OsuNowPlaying.Migrator
 {
@@ -11,7 +14,15 @@ namespace OsuNowPlaying.Migrator
 		public MainWindow()
 		{
 			InitializeComponent();
-			Loaded += (sender, args) => SizeToContent = SizeToContent.WidthAndHeight;
+			Loaded += OnLoaded;
+		}
+
+		private void OnLoaded(object sender, RoutedEventArgs e)
+		{
+			SizeToContent = SizeToContent.WidthAndHeight;
+
+			if (new Version(OSVersionInfo.MajorVersion, OSVersionInfo.MinorVersion) < new Version(6, 2))
+				ServicePointManager.SecurityProtocol |= SecurityProtocolType.Tls12;
 		}
 
 		private void OnHelpButtonClick(object sender, RoutedEventArgs e)
@@ -24,7 +35,7 @@ namespace OsuNowPlaying.Migrator
 			switch (Button.Content)
 			{
 				case "Start":
-					Button.IsEnabled = false;
+					Button.Visibility = Visibility.Collapsed;
 					StatusGrid.Visibility = Visibility.Visible;
 					Task.Run(MigrateAsync);
 					break;
@@ -136,7 +147,8 @@ namespace OsuNowPlaying.Migrator
 				"OsuMemoryDataProvider.dll",
 				"ProcessMemoryDataFinder.dll",
 				"AdonisUI.ClassicTheme.dll",
-				"AdonisUI.dll"
+				"AdonisUI.dll",
+				"OsuNowPlaying.Shared.dll"
 			};
 
 			foreach (string file in files)
@@ -183,7 +195,7 @@ namespace OsuNowPlaying.Migrator
 			Dispatcher.Invoke(() =>
 			{
 				Button.Content = text;
-				Button.IsEnabled = state;
+				Button.Visibility = state ? Visibility.Visible : Visibility.Collapsed;
 			});
 		}
 	}

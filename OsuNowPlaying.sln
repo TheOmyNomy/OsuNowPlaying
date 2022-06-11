@@ -4,6 +4,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OsuNowPlaying", "OsuNowPlay
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OsuNowPlaying.Migrator", "OsuNowPlaying.Migrator\OsuNowPlaying.Migrator.csproj", "{D85B7CE2-A81A-4830-A3B3-3405862A8717}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OsuNowPlaying.Shared", "OsuNowPlaying.Shared\OsuNowPlaying.Shared.csproj", "{A9ECBF99-5AC7-4736-A486-458FA9DD6021}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -18,5 +20,9 @@ Global
 		{D85B7CE2-A81A-4830-A3B3-3405862A8717}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D85B7CE2-A81A-4830-A3B3-3405862A8717}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{D85B7CE2-A81A-4830-A3B3-3405862A8717}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A9ECBF99-5AC7-4736-A486-458FA9DD6021}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A9ECBF99-5AC7-4736-A486-458FA9DD6021}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A9ECBF99-5AC7-4736-A486-458FA9DD6021}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A9ECBF99-5AC7-4736-A486-458FA9DD6021}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal

@@ -79,7 +79,16 @@ namespace OsuNowPlaying.Migrator
 				}
 			};
 
-			bool result = installProcess.Start();
+			bool result;
+
+			try
+			{
+				result = installProcess.Start();
+			}
+			catch (Exception)
+			{
+				return false;
+			}
 
 			if (!result)
 				return false;
