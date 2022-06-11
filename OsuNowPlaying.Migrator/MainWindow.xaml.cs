@@ -40,6 +40,8 @@ namespace OsuNowPlaying.Migrator
 
 		private async Task MigrateAsync()
 		{
+			Directory.CreateDirectory(App.WorkingPath);
+
 			const int steps = 6;
 			const double incrementAmount = 100.0 / steps;
 
