@@ -142,6 +142,9 @@ namespace OsuNowPlaying.Migrator
 				if (File.Exists(file))
 					File.Move(file, Path.Combine(klserjhtPath, file));
 			}
+
+			if (Directory.Exists("_update"))
+				Directory.Delete("_update", true);
 		}
 
 		private void ShowErrorMessage(string text)
