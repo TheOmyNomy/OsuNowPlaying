@@ -15,9 +15,11 @@ to the streamer's chat.
 
 ## Installation
 
-[Click here](https://github.com/TheOmyNomy/OsuNowPlaying/releases/latest/download/osu!np.exe) to download the latest
-version.
-
+1. [Click here](https://aka.ms/dotnet/6.0/windowsdesktop-runtime-win-x64.exe) to download and install the latest release
+   of .NET 6.
+2. [Click here](https://github.com/TheOmyNomy/OsuNowPlaying/releases/latest/download/osu-np.exe) to download the latest
+   osu!np release.
+3. Run the `osu-np.exe` executable.
 ## Usage
 
 ![](assets/example.png)

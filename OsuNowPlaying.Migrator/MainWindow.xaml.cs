@@ -45,14 +45,14 @@ namespace OsuNowPlaying.Migrator
 
 			if (!DotNetManager.IsInstalled)
 			{
-				UpdateStatusInformation("Downloading .NET...", incrementAmount * 1);
+				UpdateStatusInformation("Downloading .NET 6...", incrementAmount * 1);
 				await DotNetManager.DownloadAsync();
 
-				UpdateStatusInformation("Installing .NET...", incrementAmount * 2);
+				UpdateStatusInformation("Installing .NET 6...", incrementAmount * 2);
 
 				if (!DotNetManager.Install() || !DotNetManager.IsInstalled)
 				{
-					ShowErrorMessage("Error: Failed to install .NET\r\nPlease click the help button below for instructions on installing manually");
+					ShowErrorMessage("Error: Failed to install .NET 6\r\nPlease click the help button below for instructions on installing manually");
 					UpdateHelpButtonState(true, true);
 					UpdateButtonState("Exit", true);
 
@@ -60,7 +60,7 @@ namespace OsuNowPlaying.Migrator
 				}
 			}
 
-			UpdateStatusInformation("Downloading latest osu!np version...", incrementAmount * 3);
+			UpdateStatusInformation("Downloading latest osu!np release...", incrementAmount * 3);
 
 			Directory.CreateDirectory(App.WorkingPath);
 
