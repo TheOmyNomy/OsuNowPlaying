@@ -73,6 +73,8 @@ namespace OsuNowPlaying.Migrator
 				}
 			}
 
+			File.Delete(Path.Combine(App.WorkingPath, "windowsdesktop-runtime-win-x64.exe"));
+
 			UpdateStatusInformation("Downloading latest osu!np release...", incrementAmount * 3);
 
 			Directory.CreateDirectory(App.WorkingPath);

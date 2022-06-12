@@ -21,8 +21,6 @@ public partial class MigrationWindow
 
 		if (Directory.Exists(klserjhtPath))
 			Directory.Delete(klserjhtPath, true);
-
-		File.Delete(Path.Combine(App.WorkingPath, "windowsdesktop-runtime-win-x64.exe"));
 	}
 
 	private void OnHyperlinkRequestNavigate(object sender, RequestNavigateEventArgs e)
