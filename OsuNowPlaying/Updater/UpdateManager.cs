@@ -92,10 +92,8 @@ public static class UpdateManager
 		fileStream.Close();
 		stream.Close();
 
-		string currentExecutablePath = Directory.GetCurrentDirectory() + "\\osu-np.exe";
-
-		File.Move(currentExecutablePath, OldExecutablePath, true);
-		File.Move(DownloadedExecutablePath, currentExecutablePath, true);
+		File.Move(App.CurrentExecutablePath, OldExecutablePath, true);
+		File.Move(DownloadedExecutablePath, App.CurrentExecutablePath, true);
 
 		return true;
 	}

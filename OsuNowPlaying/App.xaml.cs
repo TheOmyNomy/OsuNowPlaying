@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics;
 using System.IO;
 using System.Net;
 using System.Runtime.InteropServices;
@@ -22,6 +23,9 @@ public partial class App
 #endif
 
 	public static readonly string WorkingPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "osu!np");
+
+	public static string CurrentExecutablePath =>
+		Process.GetCurrentProcess().MainModule?.FileName ?? $"{Directory.GetCurrentDirectory()}\\{Process.GetCurrentProcess().ProcessName}.exe";
 
 	private readonly IServiceProvider _serviceProvider;
 
