@@ -4,6 +4,7 @@ using System.IO;
 using System.Net;
 using System.Threading.Tasks;
 using System.Windows;
+using Newtonsoft.Json;
 using OsuNowPlaying.Migrator.Updater;
 using OsuNowPlaying.Shared.Utilities;
 
@@ -20,6 +21,8 @@ namespace OsuNowPlaying.Migrator
 		private void OnLoaded(object sender, RoutedEventArgs e)
 		{
 			SizeToContent = SizeToContent.WidthAndHeight;
+
+			JsonConvert.DefaultSettings = () => new JsonSerializerSettings { MaxDepth = 128 };
 
 			if (new Version(OSVersionInfo.MajorVersion, OSVersionInfo.MinorVersion) < new Version(6, 2))
 				ServicePointManager.SecurityProtocol |= SecurityProtocolType.Tls12;
