@@ -91,8 +91,7 @@
 				         KeyboardNavigation.TabIndex="1" TextChanged="OnUsernameTextBoxTextChanged" />
 
 				<TextBlock Grid.Column="0" Grid.Row="1" TextAlignment="Right" xml:space="preserve">Token <Hyperlink
-					NavigateUri="https://twitchapps.com/tmi/" RequestNavigate="OnHyperlinkRequestNavigate"
-					KeyboardNavigation.TabIndex="0">(?)</Hyperlink></TextBlock>
+					Click="OnTokenHyperlinkClick" KeyboardNavigation.TabIndex="0">(?)</Hyperlink></TextBlock>
 
 				<PasswordBox Grid.Column="1" Grid.Row="1" Width="175" Margin="5,0,0,5" Name="TokenTextBox"
 				             KeyboardNavigation.TabIndex="2" PasswordChar="*" />
@@ -111,7 +110,7 @@
 						          Unchecked="OnAdvancedCheckBoxChecked">
 							<TextBlock TextAlignment="Right" xml:space="preserve">Advanced <Hyperlink
 								NavigateUri="https://github.com/TheOmyNomy/OsuNowPlaying/blob/master/README.md"
-								RequestNavigate="OnHyperlinkRequestNavigate" KeyboardNavigation.TabIndex="6">(?)</Hyperlink></TextBlock>
+								RequestNavigate="OnAdvancedHyperlinkRequestNavigate" KeyboardNavigation.TabIndex="6">(?)</Hyperlink></TextBlock>
 						</CheckBox>
 					</DockPanel>
 				</GroupBox>

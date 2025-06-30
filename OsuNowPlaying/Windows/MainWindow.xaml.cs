@@ -240,7 +240,13 @@ public partial class MainWindow
 		ErrorBannerGroupBox.Visibility = Visibility.Collapsed;
 	}
 
-	private void OnHyperlinkRequestNavigate(object sender, RequestNavigateEventArgs e)
+	private void OnTokenHyperlinkClick(object sender, RoutedEventArgs e)
+	{
+		string tokenUrl = _configuration.GetValue<string>(ConfigurationSetting.TokenUrl);
+		Process.Start("explorer.exe", tokenUrl);
+	}
+
+	private void OnAdvancedHyperlinkRequestNavigate(object sender, RequestNavigateEventArgs e)
 	{
 		Process.Start("explorer.exe", e.Uri.AbsoluteUri);
 	}

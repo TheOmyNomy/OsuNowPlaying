@@ -1,0 +1,40 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0>" />
+    <title>Token - osu!np</title>
+</head>
+<body>
+    <label id="token-label" for="token-text">Token: </label>
+    <input id="token-text" type="text" readonly />
+    <input id="token-button" type="button" value="Copy" />
+
+    <script>
+        const accessToken = window.location.hash.substring(1).split('&')[0].split('=')[1];
+
+        const tokenText = document.getElementById('token-text');
+        tokenText.value = 'oauth:' + accessToken;
+
+        tokenText.onclick = () => {
+            tokenText.select(0, tokenText.value.length);
+        };
+
+        const tokenButton = document.getElementById('token-button');
+
+        tokenButton.onclick = () => {
+            tokenText.select(0, tokenText.value.length);
+
+            try {
+                navigator.clipboard.writeText(tokenText.value);
+            } catch {
+                try {
+                    document.execCommand('copy');
+                } catch {
+                    alert('Failed to copy token to clipboard.');
+                }
+            }
+        };
+    </script>
+</body>
+</html>

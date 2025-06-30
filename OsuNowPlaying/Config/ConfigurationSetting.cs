@@ -6,5 +6,6 @@ public enum ConfigurationSetting
 	Token,
 	Channel,
 	Command,
-	Format
+	Format,
+	TokenUrl
 }

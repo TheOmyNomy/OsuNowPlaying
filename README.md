@@ -15,8 +15,8 @@ to the streamer's chat.
 
 ## Installation
 
-1. [Click here](https://aka.ms/dotnet/6.0/windowsdesktop-runtime-win-x64.exe) to download and install the latest release
-   of .NET 6.
+1. [Click here](https://aka.ms/dotnet/8.0/windowsdesktop-runtime-win-x64.exe) to download and install the latest release
+   of .NET 8.
 2. [Click here](https://github.com/TheOmyNomy/OsuNowPlaying/releases/latest/download/osu-np.exe) to download the latest
    osu!np release.
 3. Run the `osu-np.exe` executable.
@@ -27,9 +27,8 @@ to the streamer's chat.
 The simplest way to use osu!np is with your own Twitch account.
 
 * Enter your username in the **Username** text field.
-* Click the **(?)** link next to the **Token** label or [click here](https://twitchapps.com/tmi/) to open the **Twitch
-  Chat OAuth Password Generator** website.
-    * Click the **Connect** button and then the **Authorise** button.
+* Click the **(?)** link next to the **Token** label (or [click here](https://osu-np.nomy.sh/request-token)) and authenticate with Twitch
+  to generate a token.
 * Copy the token (including the `oauth:` at the start) from the website and paste it into the **Token** text field.
 * Click the **Login** button.
 

@@ -33,6 +33,10 @@ public class Configuration
 			{
 				ConfigurationSetting.Format,
 				new ConfigurationObject("@!sender! !artist! - !title! (!creator!) [!version!] - https://osu.ppy.sh/beatmaps/!id!")
+			},
+			{
+				ConfigurationSetting.TokenUrl,
+				new ConfigurationObject("https://osu-np.nomy.sh/request-token")
 			}
 		};
 
