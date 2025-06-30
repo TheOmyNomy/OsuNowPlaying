@@ -1,10 +1,13 @@
-﻿using ProcessMemoryDataFinder.Structured;
+﻿using ProcessMemoryDataFinder;
+using ProcessMemoryDataFinder.Structured;
 
 namespace OsuNowPlaying;
 
 public class StructuredOsuMemoryReader : OsuMemoryDataProvider.StructuredOsuMemoryReader
 {
 	private readonly CurrentBeatmap _currentBeatmap = new();
+
+	public StructuredOsuMemoryReader(ProcessTargetOptions processTargetOptions) : base(processTargetOptions) { }
 
 	public string? ReadBeatmapArtist()
 	{

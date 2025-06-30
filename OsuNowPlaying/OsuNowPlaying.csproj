@@ -2,7 +2,7 @@
 
 	<PropertyGroup>
 		<OutputType>WinExe</OutputType>
-		<TargetFramework>net6.0-windows</TargetFramework>
+		<TargetFramework>net8.0-windows</TargetFramework>
 		<Nullable>enable</Nullable>
 		<UseWPF>true</UseWPF>
 		<ApplicationIcon>icon.ico</ApplicationIcon>
@@ -20,10 +20,10 @@
 
 	<ItemGroup>
 		<PackageReference Include="AdonisUI.ClassicTheme" Version="1.17.1" />
-		<PackageReference Include="AsyncAwaitBestPractices" Version="6.0.4" />
-		<PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="6.0.0" />
-		<PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
-		<PackageReference Include="OsuMemoryDataProvider" Version="0.10.3" />
+		<PackageReference Include="AsyncAwaitBestPractices" Version="9.0.0" />
+		<PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="9.0.6" />
+		<PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
+		<PackageReference Include="OsuMemoryDataProvider" Version="0.11.1" />
 	</ItemGroup>
 
 	<ItemGroup>

@@ -10,6 +10,7 @@ using OsuNowPlaying.Client.Events;
 using OsuNowPlaying.Config;
 using OsuNowPlaying.Logging;
 using OsuNowPlaying.Updater;
+using ProcessMemoryDataFinder;
 
 namespace OsuNowPlaying.Windows;
 
@@ -26,7 +27,7 @@ public partial class MainWindow
 	{
 		_configuration = configuration;
 
-		_osuMemoryReader = new StructuredOsuMemoryReader();
+		_osuMemoryReader = new StructuredOsuMemoryReader(new ProcessTargetOptions("osu!"));
 		_twitchClient = new TwitchClient();
 
 		_twitchClient.Connected += OnTwitchClientConnected;
