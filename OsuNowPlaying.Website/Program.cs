@@ -3,6 +3,8 @@ using System.Text;
 var builder = WebApplication.CreateBuilder(args);
 var app = builder.Build();
 
+app.UseStaticFiles();
+
 app.MapFallback(context =>
 {
     string url = "https://github.com/TheOmyNomy/OsuNowPlaying";

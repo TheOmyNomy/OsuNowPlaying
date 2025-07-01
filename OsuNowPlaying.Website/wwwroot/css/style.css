@@ -1,0 +1,68 @@
+﻿:root {
+    font-family: sans-serif;
+}
+
+body {
+    height: 100vh;
+    width: 512px;
+
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+
+    margin: auto;
+}
+
+.box {
+    display: flex;
+    justify-content: center;
+    align-items: baseline;
+
+    padding: 16px;
+
+    background-color: #eee;
+    border: 1px solid #bbb;
+}
+
+.box-direction-column {
+    flex-direction: column;
+    gap: 16px;
+}
+
+.box-direction-row {
+    flex-direction: row;
+    gap: 4px;
+}
+
+.box-paragraph {
+    margin: 0;
+}
+
+.font-bold {
+    font-weight: bold;
+}
+
+#token-text {
+    height: 20px;
+    width: 192px;
+
+    background-color: #fff;
+    border: 1px solid #ccc;
+    border-radius: 0;
+
+    font-size: 14px;
+}
+
+#token-button {
+    height: 24px;
+
+    background-color: #fff;
+    border: 1px solid #ccc;
+
+    font-size: 14px;
+}
+
+#token-button:active {
+    background-color: #eee;
+    border: 1px solid #bbb;
+}
