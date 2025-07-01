@@ -31,7 +31,7 @@ app.MapGet("/request-token", context =>
     if (baseUrl.EndsWith('/'))
         baseUrl = baseUrl.Remove(baseUrl.Length - 1);
 
-    const string scope = "user:bot";
+    const string scopes = "chat:read%20chat:edit";
     Guid state = Guid.NewGuid();
 
     StringBuilder uriBuilder = new StringBuilder("https://id.twitch.tv/oauth2/authorize");
@@ -39,7 +39,7 @@ app.MapGet("/request-token", context =>
     uriBuilder.Append("?client_id=").Append(clientId);
     uriBuilder.Append("&redirect_uri=").Append(baseUrl).Append("/token");
     uriBuilder.Append("&response_type=token");
-    uriBuilder.Append("&scope=").Append(scope);
+    uriBuilder.Append("&scope=").Append(scopes);
     uriBuilder.Append("&state=").Append(state);
 
     string url = uriBuilder.ToString();
